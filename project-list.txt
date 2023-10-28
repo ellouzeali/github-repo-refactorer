@@ -1,0 +1,4 @@
+Github_URL  New_Repo_Name
+https://github.com/a-ellouze/b2c-tde-bridge.git tcs-b2c-tde-bridge
+https://github.com/a-ellouze/b2c-tevcs-bridge.git   tcs-b2c-tevcs-bridge
+https://github.com/a-ellouze/b2c-evse-manager.git	tcs-b2c-evse-manager

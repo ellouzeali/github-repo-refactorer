@@ -1,6 +1,9 @@
-import requests
+from utils import get_project_list
+from dotenv import load_dotenv
 
 def main():
+    print("RUNNING GITHUB-REPO-REFACTORER")
+
     # Load variables from .env file into environment variables
     load_dotenv()
     github_org_name = os.getenv("GITHUB_ORG_NAME")
@@ -22,4 +25,12 @@ def main():
         print("One or more environment variables are missing.")
         sys.exit(1)
     try:
-        print("RUNNING GITHUB-REPO-REFACTORER")
+        projects = get_project_list(project_list_file_path)
+        for project in projects:
+            print(project)
+
+    except ValueError as e:
+        print("Error:", e)
+
+      
+

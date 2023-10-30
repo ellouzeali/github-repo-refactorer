@@ -7,6 +7,7 @@ def rename_github_repo(github_repo_url, github_token, new_name):
     try:
         # Extract the owner and repository name from the GitHub URL
         owner, repo_name = github_repo_url.split('/')[-2:]
+        repo_name = repo_name.replace('.git', '')
 
         # Construct the API URLs
         repo_exists_url = f'https://api.github.com/repos/{owner}/{repo_name}'

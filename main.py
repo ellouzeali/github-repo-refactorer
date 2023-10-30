@@ -40,7 +40,7 @@ def main():
             print(project)
 
             # Step 2: Rename projects
-            had_error, error_message = rename_github_repo(project.github_repo_url, github_token, project.new_repo_name)
+            had_error, error_message = rename_github_repo(project["github_repo_url"], github_token, project["new_repo_name"])
             if had_error:
                 print(f"Error in renaming Github repo: {error_message}")
             else:

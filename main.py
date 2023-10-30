@@ -1,38 +1,25 @@
 import requests
 
-def rename_github_repo(github_repo_url, github_token, new_name):
-    # Extract the owner and repository name from the GitHub URL
-    owner, repo_name = github_repo_url.split('/')[-2:]
+def main():
+    # Load variables from .env file into environment variables
+    load_dotenv()
+    github_org_name = os.getenv("GITHUB_ORG_NAME")
+    github_token = os.getenv("GITHUB_TOKEN")
+    github_devops_repo_url = os.getenv("GITHUB_DEVOPS_REPO_URL")
+    github_devops_repo_branch_name = os.getenv("GITHUB_DEVOPS_REPO_BRANCH_NAME")
+    github_devops_repo_file_path = os.getenv("GITHUB_DEVOPS_REPO_FILE_PATH")
+    project_list_file_path = os.getenv("PROJECT_LIST_FILE_PATH")
 
-    # Construct the API URLs
-    repo_exists_url = f'https://api.github.com/repos/{owner}/{repo_name}'
-    rename_repo_url = f'https://api.github.com/repos/{owner}/{repo_name}'
-
-    # Set up headers with the GitHub token
-    headers = {
-        'Authorization': f'token {github_token}',
-        'Accept': 'application/vnd.github.v3+json'
-    }
-
-    # Check if the repository exists
-    response = requests.get(repo_exists_url, headers=headers)
-
-    if response.status_code == 200:
-        # Repository exists, proceed to rename
-        data = {
-            "name": new_name
-        }
-        response = requests.patch(rename_repo_url, headers=headers, json=data)
-
-        if response.status_code == 200:
-            print(f"Repository {owner}/{repo_name} has been renamed to {owner}/{new_name}")
-        else:
-            print(f"Failed to rename the repository. Status code: {response.status_code}")
-    else:
-        print(f"Repository {owner}/{repo_name} does not exist or you do not have permission to access it.")
-
-# Usage example:
-github_repo_url = 'https://github.com/a-ellouze/b2c-tde-bridge.git'
-github_token = 'GITHUB_TOKEN'
-new_name = 'new-repo-name'
-rename_github_repo(github_repo_url, github_token, new_name)
+    # Check if all required environment variables are defined
+    if None in (
+        github_org_name,
+        github_token,
+        github_devops_repo_url,
+        github_devops_repo_branch_name,
+        github_devops_repo_file_path,
+        project_list_file_path,
+    ):
+        print("One or more environment variables are missing.")
+        sys.exit(1)
+    try:
+        print("RUNNING GITHUB-REPO-REFACTORER")

@@ -40,11 +40,12 @@ def main():
             print(project)
 
             # Step 2: Rename projects
-            had_error, error_message = rename_github_repo(project["github_repo_url"], github_token, project["new_repo_name"])
+            had_error, error_message, response_message, new_github_repo_url = rename_github_repo(project["github_repo_url"], github_token, project["new_repo_name"])
             if had_error:
                 print(f"Error in renaming Github repo: {error_message}")
             else:
-                print("Github Repo was successfully renamed")
+                print(f"{response_message}")
+                print(f"New Repo URL: {new_github_repo_url}")
 
     except ValueError as e:
         print("Error In parsing project-list file:", e)

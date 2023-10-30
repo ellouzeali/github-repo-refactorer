@@ -30,9 +30,21 @@ def main():
         print("One or more environment variables are missing.")
         sys.exit(1)
     try:
+        had_error = False
+        error_message = ""
+
+        # Step 1: Get list of projects
         projects = get_project_list(project_list_file_path)
+
         for project in projects:
             print(project)
+
+            # Step 2: Rename projects
+            had_error, error_message = rename_github_repo(project.github_repo_url, github_token, project.new_repo_name)
+            if had_error:
+                print(f"Error in renaming Github repo: {error_message}")
+            else:
+                print("Github Repo was successfully renamed")
 
     except ValueError as e:
         print("Error In parsing project-list file:", e)

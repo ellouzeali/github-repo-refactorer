@@ -7,16 +7,16 @@ def get_project_list (file_path):
         reader = csv.DictReader(csvfile, delimiter='\t')
 
         for line_number, row in enumerate(reader, start=2):  # Start at line 2 to account for header
-            old_gitlab_url = row.get('Old_Gitlab_URL')
-            github_url = row.get('Github_URL')
+            old_gitlab_repo_url = row.get('Old_Gitlab_URL')
+            github_repo_url = row.get('Github_URL')
             new_repo_name = row.get('New_Repo_Name')
 
-            if not old_gitlab_url or not github_url or not new_repo_name:
+            if not old_gitlab_repo_url or not github_repo_url or not new_repo_name:
                 raise ValueError(f"Missing data on line {line_number}.")
 
             project = {
-                "old_gitlab_url": old_gitlab_url,
-                "github_url": github_url,
+                "old_gitlab_repo_url": old_gitlab_repo_url,
+                "github_repo_url": github_repo_url,
                 "new_repo_name": new_repo_name
             }
             

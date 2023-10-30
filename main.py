@@ -1,5 +1,10 @@
 from utils import get_project_list
+from github_operations import rename_github_repo
 from dotenv import load_dotenv
+import shutil
+import time
+import sys
+import os
 
 def main():
     print("RUNNING GITHUB-REPO-REFACTORER")
@@ -30,7 +35,8 @@ def main():
             print(project)
 
     except ValueError as e:
-        print("Error:", e)
+        print("Error In parsing project-list file:", e)
 
       
-
+if __name__ == "__main__":
+    main()

@@ -4,7 +4,7 @@ def rename_github_repo(github_repo_url, github_token, new_name):
     had_error = False
     error_message = ""
 
-   try:
+    try:
         # Extract the owner and repository name from the GitHub URL
         owner, repo_name = github_repo_url.split('/')[-2:]
 

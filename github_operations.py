@@ -1,16 +1,12 @@
 import requests
 
-def rename_github_repo(github_repo_url, github_token, new_name):
+def rename_github_repo(owner, repo_name, github_token, new_name):
     had_error = False
     error_message = ""
     response_message = ""
     new_github_url = ""
 
     try:
-        # Extract the owner and repository name from the GitHub URL
-        owner, repo_name = github_repo_url.split('/')[-2:]
-        repo_name = repo_name.replace('.git', '')
-
         if repo_name == new_name:
             print(f"Ignore renaming repo {owner}/{repo_name}")
             response_message = response_message + f"Ignore renaming repo {owner}/{repo_name} \n"

@@ -1,5 +1,6 @@
 from utils import get_project_list
 from github_operations import rename_github_repo
+from replace_url_operations import update_scm_connections_in_maven_repositories, edit_and_commit_github_file
 from dotenv import load_dotenv
 import logging
 import getpass
@@ -96,7 +97,7 @@ def main():
                 logging.error(f"==> Error in renaming Github repo: {error_message}")
                 with open(fr_file_path, "a") as file:
                     # Add the project URL to the list of failed refactoring projects.
-                    file.write(gitlab_project_url + '\n')
+                    file.write(github_repo_url + '\n')
                 continue
             else:
                 print(f"{response_message}")
@@ -118,6 +119,23 @@ def main():
                 had_issue = True                          
             else:
                 logging.info(f'SCM connections were successfully updated in the pom files')
+
+
+            # Step 3: Change repository URL inside the CI/CD project
+            logging.info(f'*************** Step 3: Change repository URL inside the CI/CD project***************')
+            # Remove the ".git" from the Url
+            old_repo_url = old_gitlab_repo_url.replace('.git', '')
+            new_repo_url = new_github_repo_url.replace('.git', '')
+            logging.info(f'Old Gitlab Repo URL: {old_repo_url}')
+            logging.info(f'New Github Repo URL: {new_repo_url}')
+
+            had_error, error_message = edit_and_commit_github_file (github_devops_repo_url, github_token, github_devops_repo_branch_name, github_devops_repo_file_path, old_repo_url, new_repo_url)
+            if had_error:
+                logging.error(error_message)
+                had_issue = True
+            else:
+                logging.info(f'Repository URL was successfully updated in the CI/CD config File')      
+
 
 
     except ValueError as e:

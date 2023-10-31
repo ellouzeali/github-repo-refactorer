@@ -136,11 +136,17 @@ def main():
             else:
                 logging.info(f'Repository URL was successfully updated in the CI/CD config File')      
 
-
+        # Close the log file
+        logging.shutdown()
 
     except ValueError as e:
         print("Error In parsing project-list file:", e)
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        sys.exit(1)
 
-      
+
+
+
 if __name__ == "__main__":
     main()

@@ -61,7 +61,7 @@ def main():
         logging.basicConfig(filename=log_file_path, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s\n')
 
 
-        # Step 1: Get list of projects
+        # Get list of projects
         projects = get_project_list(project_list_file_path)
 
         for project in projects:
@@ -83,14 +83,14 @@ def main():
 
 
 
-            # Step 2: Rename projects
-            logging.info(f'Renaming Github Repo')
-            # Extract the organization and repository name from the GitHub URL
-            organization, repo_name = github_repo_url.split('/')[-2:]
+            # Step 1: Rename projects
+            logging.info(f'*************** Step 1: Renaming Github Repo ***************')
+            # Extract the current repository name from the GitHub URL
+            repo_name = github_repo_url.split('/')[-1:]
             repo_name = repo_name.replace('.git', '')
             logging.info(f'Current Repo Name: {repo_name}')
             logging.info(f'New Repo Name: {new_repo_name}')
-            had_error, error_message, response_message, new_github_repo_url = rename_github_repo(organization, repo_name, github_token, new_repo_name)
+            had_error, error_message, response_message, new_github_repo_url = rename_github_repo(github_org_name, repo_name, github_token, new_repo_name)
             if had_error:
                 print(f"Error in renaming Github repo: {error_message}")
                 logging.error(f"==> Error in renaming Github repo: {error_message}")
@@ -101,6 +101,24 @@ def main():
             else:
                 print(f"{response_message}")
                 print(f"New Repo URL: {new_github_repo_url}")
+                logging.info(f'{response_message}')
+                logging.info(f'New Repo URL: {new_github_repo_url}')
+
+
+            # Step 2: Change repository URL inside pom.xml file and commit the changes
+            logging.info(f'*************** Step 2: Update pom.xml files if exists ***************')
+            github_project_path_segment = "/".join([github_org_name, new_repo_name])
+
+            logging.info(f'Github Project Path Segment: {github_project_path_segment}')
+            print(f"Github Project Path Segment: {github_project_path_segment}")
+
+            had_error, error_message = update_scm_connections_in_maven_repositories(new_github_repo_url, github_token, github_project_path_segment)
+            if had_error:
+                logging.error(error_message)
+                had_issue = True                          
+            else:
+                logging.info(f'SCM connections were successfully updated in the pom files')
+
 
     except ValueError as e:
         print("Error In parsing project-list file:", e)

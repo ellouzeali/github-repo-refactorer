@@ -17,11 +17,8 @@ class UpdatePomXmlError(Exception):
         super().__init__(message)
 
 
-def update_pom_xml_file(xml_file, target_namespace, scm_connection, scm_developer_connection, scm_url):
+def update_scm_elements(xml_file, target_namespace, scm_connection, scm_developer_connection, scm_url):
     scm_element_successfully_updated = False
-    scm_connection_updated = False
-    scm_developer_connection_updated = False
-    scm_url_updated = False
 
     try:
         tree = ET.parse(xml_file)
@@ -30,39 +27,42 @@ def update_pom_xml_file(xml_file, target_namespace, scm_connection, scm_develope
         # Define the XML namespace
         namespace = {'ns': target_namespace}
 
-        # Find and extract data
-        connection_element = root.find(".//ns:connection", namespaces=namespace)
-        developer_connection_element = root.find(".//ns:developerConnection", namespaces=namespace)
-        url_element = root.find(".//ns:url", namespaces=namespace)
-        tag_element = root.find(".//ns:tag", namespaces=namespace)
+        # Find the 'scm' element
+        scm_element = root.find(".//ns:scm", namespaces=namespace)
 
-        if connection_element is not None:
-            # Change the value of the 'connection' element
-            connection_element.text = scm_connection
-            scm_connection_updated = True
-            print("Updated Connection:", connection_element.text)
-        if developer_connection_element is not None:
-            # Change the value of the 'developerConnection' element
-            developer_connection_element.text = scm_developer_connection
-            scm_developer_connection_updated = True
-            print("Updated Developer Connection:", developer_connection_element.text)
-        if url_element is not None:
-            # Change the value of the 'url' element
-            url_element.text = scm_url
-            scm_url_updated = True
-            print("Updated URL:", url_element.text)
-        # Save the changes back to the XML file with the original namespaces
-        tree.write(xml_file, encoding='utf-8', xml_declaration=True, default_namespace=namespace['ns'])
-        if scm_connection_updated and scm_developer_connection_updated and scm_url_updated:
+        if scm_element is not None:
+            # Find and update the 'connection' element within 'scm'
+            connection_element = scm_element.find(".//ns:connection", namespaces=namespace)
+            if connection_element is not None:
+                connection_element.text = scm_connection
+                print("Updated Connection:", connection_element.text)
+
+            # Find and update the 'developerConnection' element within 'scm'
+            developer_connection_element = scm_element.find(".//ns:developerConnection", namespaces=namespace)
+            if developer_connection_element is not None:
+                developer_connection_element.text = scm_developer_connection
+                print("Updated Developer Connection:", developer_connection_element.text)
+
+            # Find and update the 'url' element within 'scm'
+            url_element = scm_element.find(".//ns:url", namespaces=namespace)
+            if url_element is not None:
+                url_element.text = scm_url
+                print("Updated URL:", url_element.text)
+
+            # Save the changes back to the XML file with the original namespaces
+            tree.write(xml_file, encoding='utf-8', xml_declaration=True, default_namespace=namespace['ns'])
             scm_element_successfully_updated = True
+        else:
+            raise UpdatePomXmlError("No 'scm' element found in the pom.xml file.")
+
     except ET.ParseError as e:
         raise UpdatePomXmlError(f"Error parsing XML: {str(e)}")
     except FileNotFoundError as e:
         raise UpdatePomXmlError(f"File not found: {str(e)}")
     except Exception as e:
-        raise UpdatePomXmlError(f"An error occurred in update_pom_xml_file: {str(e)}")
+        raise UpdatePomXmlError(f"An error occurred in update_scm_elements: {str(e)}")
     
-    return scm_element_successfully_updated  # Return the status here
+    return scm_element_successfully_updated
 
 
 

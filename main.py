@@ -7,6 +7,7 @@ import getpass
 import gitlab
 import shutil
 import time
+import sys
 import os
 
 def main():
@@ -87,8 +88,7 @@ def main():
             # Step 1: Rename projects
             logging.info(f'*************** Step 1: Renaming Github Repo ***************')
             # Extract the current repository name from the GitHub URL
-            repo_name = github_repo_url.split('/')[-1:]
-            repo_name = repo_name.replace('.git', '')
+            repo_name = github_repo_url.split('/')[-1].replace(".git", "")
             logging.info(f'Current Repo Name: {repo_name}')
             logging.info(f'New Repo Name: {new_repo_name}')
             had_error, error_message, response_message, new_github_repo_url = rename_github_repo(github_org_name, repo_name, github_token, new_repo_name)

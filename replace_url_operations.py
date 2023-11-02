@@ -17,7 +17,7 @@ class UpdatePomXmlError(Exception):
         super().__init__(message)
 
 
-def update_scm_elements(xml_file, target_namespace, scm_connection, scm_developer_connection, scm_url):
+def update_pom_xml_file(xml_file, target_namespace, scm_connection, scm_developer_connection, scm_url):
     scm_element_successfully_updated = False
 
     try:
@@ -219,16 +219,6 @@ if __name__ == "__main__":
     github_project_path_segment = "new/github/path"
 
     edit_pom_xml(github_project_url, github_access_token, gitlab_project_path_segment, github_project_path_segment)
-
-    ############################################################################################################################
-
-    gitlab_url = "https://gitlab.com"
-    gitlab_token = "YOUR_GITLAB_TOKEN"
-    project_id = "YOUR_PROJECT_ID"  # Replace with the actual project ID
-    file_path = "path/to/your/file.yml"  # Replace with the path to your file
-
-    edit_and_commit_gitlab_file(gitlab_url, gitlab_token, project_id, file_path)
-
 
     ############################################################################################################################
     github_repo_url = "https://github.com/yourusername/your-repo"

@@ -7,7 +7,7 @@ import git
 from git import Repo
 from github import Github
 from github.GithubException import GithubException
-import xml.etree.ElementTree as ET
+from lxml import etree
 import shutil
 
 
@@ -21,16 +21,19 @@ def update_pom_xml_file(xml_file, target_namespace, scm_connection, scm_develope
     scm_element_successfully_updated = False
 
     try:
-        tree = ET.parse(xml_file)
+        parser = etree.XMLParser(strip_cdata=False)
+        tree = etree.parse(xml_file, parser=parser)
         root = tree.getroot()
 
         # Define the XML namespace
         namespace = {'ns': target_namespace}
 
         # Find the 'scm' element
-        scm_element = root.find(".//ns:scm", namespaces=namespace)
+        scm_elements = root.xpath(".//ns:scm", namespaces=namespace)
 
-        if scm_element is not None:
+        if scm_elements:
+            scm_element = scm_elements[0]
+
             # Find and update the 'connection' element within 'scm'
             connection_element = scm_element.find(".//ns:connection", namespaces=namespace)
             if connection_element is not None:
@@ -48,14 +51,14 @@ def update_pom_xml_file(xml_file, target_namespace, scm_connection, scm_develope
             if url_element is not None:
                 url_element.text = scm_url
                 print("Updated URL:", url_element.text)
+            # Write the updated XML back to the file while preserving comments
+            tree.write(xml_file, pretty_print=True, xml_declaration=True, encoding='utf-8')
 
-            # Save the changes back to the XML file with the original namespaces
-            tree.write(xml_file, encoding='utf-8', xml_declaration=True, default_namespace=namespace['ns'])
             scm_element_successfully_updated = True
         else:
             raise UpdatePomXmlError("No 'scm' element found in the pom.xml file.")
 
-    except ET.ParseError as e:
+    except etree.XMLSyntaxError as e:
         raise UpdatePomXmlError(f"Error parsing XML: {str(e)}")
     except FileNotFoundError as e:
         raise UpdatePomXmlError(f"File not found: {str(e)}")

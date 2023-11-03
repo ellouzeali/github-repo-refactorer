@@ -54,7 +54,11 @@ def main():
 
         # Define the full path to the failed refactoring file
         fr_filename = "failed_refactoring.txt"
-        fr_file_path = os.path.join(output_directory, fr_filename)        
+        fr_file_path = os.path.join(output_directory, fr_filename)
+
+        # Define the full path to the failed refactoring file
+        warning_filename = "partial_success_refactoring.txt"
+        warning_file_path = os.path.join(output_directory, warning_filename)                
 
         # Create the output directory if it doesn't exist
         os.makedirs(output_directory, exist_ok=True)
@@ -135,6 +139,24 @@ def main():
                 had_issue = True
             else:
                 logging.info(f'Repository URL was successfully updated in the CI/CD config File')      
+
+
+
+            if had_issue:
+                print(f"{repo_name} has been renamed but encountered some issues in updating Urls!!")
+                logging.info(f'Warning!! {repo_name} has been renamed but encountered some issues')
+                with open(warning_file_path, "a") as file:
+                    # Add the project URL to the list of partial success migration projects.
+                    file.write(new_github_repo_url + '\n')     
+            else :
+                print(f"{repo_name} has been successfully refactored")
+                logging.info(f'{repo_name} has been successfully refactored')
+                with open(sr_file_path, "a") as file:
+                    # Add the project URL to the list of successful migration projects.
+                    file.write(new_github_repo_url + '\n')  
+
+
+
 
         # Close the log file
         logging.shutdown()

@@ -1,12 +1,8 @@
 import os
 import re
 import subprocess
-import gitlab
-from gitlab.exceptions import GitlabHttpError
 import git
-from git import Repo
 from github import Github
-from github.GithubException import GithubException
 from lxml import etree
 import shutil
 

@@ -1,5 +1,6 @@
 import os
 import re
+import yaml
 import subprocess
 import git
 from github import Github
@@ -148,12 +149,25 @@ def update_scm_connections_in_maven_repositories(github_project_url, github_acce
         return had_error, error_message 
 
 
+def get_service_names(file_content, old_url):
+    service_names = []
+
+    data = yaml.safe_load(file_content)
+    for service_name, service_info in data.get('ado_pipelines', {}).items():
+        if 'build' in service_info:
+            found = False
+            for build_step in service_info['build']:
+                if 'repository' in build_step and old_url in build_step['repository'] :
+                    found = True
+            if found:
+                service_names.append(service_name)
+    return service_names
 
 
-
-def edit_and_commit_github_file (github_repo_url, github_token, github_repo_branch_name, github_file_path, old_string, new_string):
+def update_azure_devops_services (github_repo_url, github_token, github_repo_branch_name, github_file_path, old_string, new_string):
     had_error = False
     error_message = ""
+    changed_services = []
     try:
         # Extract the username and repository name from the GitHub URL
         repo_url_parts = github_repo_url.strip("/").split("/")
@@ -180,6 +194,9 @@ def edit_and_commit_github_file (github_repo_url, github_token, github_repo_bran
 
         # Check if old_string exists in file_content before replacing it
         if old_string in file_content:
+
+            changed_services = get_service_names (file_content, old_string)
+
             # Replace old_string with new_string in the file content
             updated_content = file_content.replace(old_string, new_string)
 
@@ -205,7 +222,7 @@ def edit_and_commit_github_file (github_repo_url, github_token, github_repo_bran
         had_error = True
         error_message = f"===> An error occurred: {str(e)}"
     finally:
-        return had_error, error_message
+        return had_error, error_message, changed_services
 
 
 
@@ -227,7 +244,7 @@ if __name__ == "__main__":
     old_string = "old_gitlab_url"
     new_string = "new_github_url"
     
-    edit_and_commit_github_file(github_repo_url, github_token, github_repo_branch_name, github_file_path, old_string, new_string)
+    update_azure_devops_services(github_repo_url, github_token, github_repo_branch_name, github_file_path, old_string, new_string)
 
 
     ############################################################################################################################

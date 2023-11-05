@@ -1,6 +1,6 @@
 from utils import get_project_list
 from github_operations import rename_github_repo
-from replace_url_operations import update_scm_connections_in_maven_repositories, edit_and_commit_github_file
+from replace_url_operations import update_scm_connections_in_maven_repositories, update_azure_devops_services
 from dotenv import load_dotenv
 import logging
 import getpass
@@ -59,6 +59,10 @@ def main():
         # Define the full path to the failed refactoring file
         warning_filename = "partial_success_refactoring.txt"
         warning_file_path = os.path.join(output_directory, warning_filename)                
+
+        # Define the full path to the updated AZ Devops services
+        az_services_filename = "updated_az_devops_services.txt"
+        az_services_file_path = os.path.join(output_directory, az_services_filename) 
 
         # Create the output directory if it doesn't exist
         os.makedirs(output_directory, exist_ok=True)
@@ -133,13 +137,19 @@ def main():
             logging.info(f'Old Gitlab Repo URL: {old_repo_url}')
             logging.info(f'New Github Repo URL: {new_repo_url}')
 
-            had_error, error_message = edit_and_commit_github_file (github_devops_repo_url, github_token, github_devops_repo_branch_name, github_devops_repo_file_path, old_repo_url, new_repo_url)
+            had_error, error_message, changed_services = update_azure_devops_services (github_devops_repo_url, github_token, github_devops_repo_branch_name, github_devops_repo_file_path, old_repo_url, new_repo_url)
             if had_error:
                 logging.error(error_message)
                 had_issue = True
             else:
-                logging.info(f'Repository URL was successfully updated in the CI/CD config File')      
+                logging.info(f'Repository URL was successfully updated in the CI/CD config File')
+                logging.info(f'AZ Devops services updated are: {changed_services}')       
 
+            if changed_services:
+                with open(az_services_file_path, "a") as file:
+                    # Save updated services of infra-as-code project
+                    file.write('\n'.join(changed_services))                   
+                    file.write('\n')
 
 
             if had_issue:

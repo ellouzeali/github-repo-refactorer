@@ -2,6 +2,16 @@ import os
 import git
 import subprocess
 
+
+# Function to normalize and convert the URL to SSH format
+def normalize_and_convert_gitlab_url(gitlab_url):
+    gitlab_url = gitlab_url.strip()
+    if not gitlab_url.endswith(".git"):
+        gitlab_url = gitlab_url + ".git"
+    if gitlab_url.startswith("git@gitlab.com:"):
+        gitlab_url = gitlab_url.replace("git@gitlab.com:", "https://gitlab.com/")
+    return gitlab_url
+
 # Read the remote mapping from remote-list.txt
 remote_mapping = {}
 with open("remote-list.txt", "r") as remote_file:
@@ -27,11 +37,13 @@ for directory in directories:
     print(f"{directory} is a Git repository")
     origin_url = repo.remotes.origin.url
 
+    normalized_origin_url = normalize_and_convert_gitlab_url(origin_url)
+
     print(f"Checking Origin Remote")
     # Check if the origin remote exists in the mapping
-    if origin_url in remote_mapping:
-        print(f"Origin Remote: {origin_url} has a matching remote in the mapping.")
-        new_remote_url = remote_mapping[origin_url]
+    if normalized_origin_url in remote_mapping:
+        print(f"Origin Remote: {normalized_origin_url} has a matching remote in the mapping.")
+        new_remote_url = remote_mapping[normalized_origin_url]
         
         # Change the remote URL to SSH format
         if new_remote_url.startswith("https://github.com"):

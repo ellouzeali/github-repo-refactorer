@@ -3,7 +3,7 @@ import git
 import subprocess
 
 
-# Function to normalize and convert the URL to SSH format
+# Function to normalize and convert the Gitlab URL to Https format
 def normalize_and_convert_gitlab_url(gitlab_url):
     gitlab_url = gitlab_url.strip()
     if not gitlab_url.endswith(".git"):

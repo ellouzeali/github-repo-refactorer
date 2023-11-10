@@ -10,7 +10,7 @@ def rename_github_repo(owner, repo_name, github_token, new_name):
         if repo_name == new_name:
             print(f"Ignore renaming repo {owner}/{repo_name}")
             response_message = response_message + f"Ignore renaming repo {owner}/{repo_name} \n"
-            new_github_url = github_repo_url
+            new_github_url = f'https://github.com/{owner}/{repo_name}.git'
         else:
             # Construct the API URLs
             repo_exists_url = f'https://api.github.com/repos/{owner}/{repo_name}'

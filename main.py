@@ -108,7 +108,7 @@ def main():
                 logging.error(f"==> Error in renaming Github repo: {error_message}")
                 with open(fr_file_path, "a") as file:
                     # Add the project URL to the list of failed refactoring projects.
-                    file.write(github_repo_url + '\n')
+                    file.write(old_gitlab_repo_url + '\t' + github_repo_url + '\t' + new_repo_name + '\n')
                 continue
             else:
                 print(f"{response_message}")
@@ -161,16 +161,16 @@ def main():
 
             if had_issue:
                 print(f"{repo_name} has been renamed but encountered some issues in updating Urls!!")
-                logging.info(f'Warning!! {repo_name} has been renamed but encountered some issues')
+                logging.warning(f'Warning!! {repo_name} has been renamed but encountered some issues')
                 with open(warning_file_path, "a") as file:
                     # Add the project URL to the list of partial success migration projects.
-                    file.write(new_github_repo_url + '\n')     
+                    file.write(old_gitlab_repo_url + '\t' + new_github_repo_url + '\t' + new_repo_name + '\n')     
             else :
                 print(f"{repo_name} has been successfully refactored")
                 logging.info(f'{repo_name} has been successfully refactored')
                 with open(sr_file_path, "a") as file:
                     # Add the project URL to the list of successful migration projects.
-                    file.write(new_github_repo_url + '\n')  
+                    file.write(old_gitlab_repo_url + '\t' + new_github_repo_url + '\t' + new_repo_name + '\n')  
 
 
 

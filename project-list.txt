@@ -2,3 +2,4 @@ Old_Gitlab_URL	Github_URL	New_Repo_Name
 https://gitlab.com/symphony-cloud/infrastructure/bridges/b2c-tde-bridge.git	https://github.com/ae-organization/b2c-tde-bridge.git	tcs-b2c-tde-bridge
 https://gitlab.com/symphony-cloud/infrastructure/core/b2c-evse-manager.git	https://github.com/ae-organization/b2c-evse-manager.git	tcs-b2c-evse-manager
 https://gitlab.com/symphony-cloud/infrastructure/servicebus-utils.git	https://github.com/ae-organization/servicebus-utils.git	tcs-servicebus-utils
+https://gitlab.com/symphony-cloud/infrastructure/test.git	https://github.com/ae-organization/test.git	test2

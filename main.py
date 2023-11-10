@@ -35,6 +35,7 @@ def main():
         sys.exit(1)
     try:
         had_error = False
+        had_issue = False
         error_message = ""
 
         # Define the full path to the log file
@@ -94,7 +95,9 @@ def main():
 
 
             # Step 1: Rename projects
-            logging.info(f'*************** Step 1: Renaming Github Repo ***************')
+            logging.info('*************** Step 1: Renaming Github Repo ***************')
+            print('*************** Step 1: Renaming Github Repo ***************')
+
             # Extract the current repository name from the GitHub URL
             repo_name = github_repo_url.split('/')[-1].replace(".git", "")
             logging.info(f'Current Repo Name: {repo_name}')
@@ -116,6 +119,8 @@ def main():
 
             # Step 2: Change repository URL inside pom.xml file and commit the changes
             logging.info(f'*************** Step 2: Update pom.xml files if exists ***************')
+            print('*************** Step 2: Update pom.xml files if exists ***************')
+
             github_project_path_segment = "/".join([github_org_name, new_repo_name])
 
             logging.info(f'Github Project Path Segment: {github_project_path_segment}')
@@ -131,6 +136,8 @@ def main():
 
             # Step 3: Change repository URL inside the CI/CD project
             logging.info(f'*************** Step 3: Change repository URL inside the CI/CD project***************')
+            print('*************** Step 3: Change repository URL inside the CI/CD project***************')
+
             # Remove the ".git" from the Url
             old_repo_url = old_gitlab_repo_url.replace('.git', '')
             new_repo_url = new_github_repo_url.replace('.git', '')

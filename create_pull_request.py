@@ -110,6 +110,29 @@ def get_username_by_full_name(github, organization_name, member_full_name):
     return None  # Return None if the member is not found
 
 
+def get_organization_members(organization_name, github_token):
+    # Authenticate to GitHub
+    g = Github(github_token)
+    
+    # Get the organization
+    org = g.get_organization(organization_name)
+    
+    # Initialize an empty list to store member details
+    members_list = []
+    
+    # Get the members of the organization and create a list of dictionaries
+    for member in org.get_members():
+        member_details = {
+            "full_name": member.name,
+            "user_name": member.login
+        }
+        members_list.append(member_details)
+    
+    return members_list
+
+
+
+
 # Usage Exemple
 def main():
     # github_token = getpass.getpass("Enter your GITHUB_TOKEN: ")
@@ -119,48 +142,53 @@ def main():
     repo_name = "ae-organization/charger"
     organization_name = "ae-organization"
 
-    mr_url = "https://gitlab.com/symphony-cloud/symphony-local/charge-station-gen3/charger/-/merge_requests/55"
-    mr_id = "55"
-    mr_title = "Added Test fkh/currentWatchdogImpl to antoine/add_central_module "
-    mr_description = "Tes Description for pull request"
-    mr_status = "opened"
-    is_drafted = True
-    source_branch = "fkh/currentWatchdogImpl"
-    target_branch = "antoine/add_central_module"
-    assignee = "Ali ELLOUZE"
-    reviewers = ["MariemEllouze", "Heni Ellouze", "fawzi KHABER"]
-    labels = "sw0.8"
-    milestone = "None"
-    time_estimate = "0h"
-    time_spent = "0h"
-    mr_comments = ['Test comment 1', 'Test comment 2', 'Test comment 3']
+
+    members = get_organization_members(organization_name, github_token)
+
+    print(f"Members: {members}")
+
+    # mr_url = "https://gitlab.com/symphony-cloud/symphony-local/charge-station-gen3/charger/-/merge_requests/55"
+    # mr_id = "55"
+    # mr_title = "Added Test fkh/currentWatchdogImpl to antoine/add_central_module "
+    # mr_description = "Tes Description for pull request"
+    # mr_status = "opened"
+    # is_drafted = True
+    # source_branch = "fkh/currentWatchdogImpl"
+    # target_branch = "antoine/add_central_module"
+    # assignee = "Ali ELLOUZE"
+    # reviewers = ["MariemEllouze", "Heni Ellouze", "fawzi KHABER"]
+    # labels = "sw0.8"
+    # milestone = "None"
+    # time_estimate = "0h"
+    # time_spent = "0h"
+    # mr_comments = ['Test comment 1', 'Test comment 2', 'Test comment 3']
 
 
-    # Create a merge request object
-    merge_request_obj = {
-        "url": mr_url,
-        "id": mr_id,
-        "title": mr_title,
-        "description": mr_description,
-        "status": mr_status,
-        "is_drafted": is_drafted,
-        "source_branch": source_branch,
-        "target_branch": target_branch,
-        "assignee": assignee,
-        "reviewers": reviewers,
-        "labels": labels,
-        "milestone": milestone,
-        "time_estimate": time_estimate,
-        "total_time_spent": time_spent,
-        "comments": mr_comments
-    }   
+    # # Create a merge request object
+    # merge_request_obj = {
+    #     "url": mr_url,
+    #     "id": mr_id,
+    #     "title": mr_title,
+    #     "description": mr_description,
+    #     "status": mr_status,
+    #     "is_drafted": is_drafted,
+    #     "source_branch": source_branch,
+    #     "target_branch": target_branch,
+    #     "assignee": assignee,
+    #     "reviewers": reviewers,
+    #     "labels": labels,
+    #     "milestone": milestone,
+    #     "time_estimate": time_estimate,
+    #     "total_time_spent": time_spent,
+    #     "comments": mr_comments
+    # }   
 
-    pull_request_url = create_github_pull_request(github_token, organization_name, repo_name, merge_request_obj)
+    # pull_request_url = create_github_pull_request(github_token, organization_name, repo_name, merge_request_obj)
 
-    if pull_request_url:
-        print(f"Pull request was successfully created : {pull_request_url}")
-    else:
-        print("Failed to create pull request")
+    # if pull_request_url:
+    #     print(f"Pull request was successfully created : {pull_request_url}")
+    # else:
+    #     print("Failed to create pull request")
 
 if __name__ == "__main__":
     main()

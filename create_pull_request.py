@@ -4,7 +4,7 @@ from github import Github
 from dotenv import load_dotenv
 
 
-def create_github_pull_request(github_token, repo_name, merge_request_obj):
+def create_github_pull_request(github_token, organization_name, repo_name, merge_request_obj):
 
     # Create instance of Github auth
     g = Github(github_token)
@@ -31,7 +31,7 @@ def create_github_pull_request(github_token, repo_name, merge_request_obj):
         if assignee and assignee != "None":
 
             print(f"Assignee: {assignee}")
-            username = get_github_username(g, assignee)
+            username = get_username_by_full_name(g, organization_name, assignee)
             print(f"Username: {username}")
 
             if is_collaborator(repo, username):
@@ -44,7 +44,7 @@ def create_github_pull_request(github_token, repo_name, merge_request_obj):
             for reviewer in reviewers:
 
                 print(f"Reviewer: {reviewer}")
-                username = get_github_username(g, reviewer)
+                username = get_username_by_full_name(g, organization_name, reviewer)
                 print(f"Username: {username}")                
 
                 if is_collaborator(repo, username):
@@ -97,6 +97,21 @@ def get_github_username(github, full_name):
     return None
 
 
+def get_username_by_full_name(github, organization_name, member_full_name):
+    
+    # Get the organization
+    org = github.get_organization(organization_name)
+    
+    # Get the members of the organization and filter by full name
+    members = org.get_members(query=member_full_name)
+    
+    # Return the username of the first member found
+    if members.totalCount > 0:
+        return members[0].login
+    
+    return None  # Return None if the member is not found
+
+
 # Usage Exemple
 def main():
     # github_token = getpass.getpass("Enter your GITHUB_TOKEN: ")
@@ -104,6 +119,7 @@ def main():
     github_token = os.getenv("GITHUB_TOKEN")
 
     repo_name = "ae-organization/charger"
+    organization_name = "ae-organization"
 
     mr_url = "https://gitlab.com/symphony-cloud/symphony-local/charge-station-gen3/charger/-/merge_requests/55"
     mr_id = "55"
@@ -141,7 +157,7 @@ def main():
         "comments": mr_comments
     }   
 
-    pull_request_url = create_github_pull_request(github_token, repo_name, merge_request_obj)
+    pull_request_url = create_github_pull_request(github_token, organization_name, repo_name, merge_request_obj)
 
     if pull_request_url:
         print(f"Pull request was successfully created : {pull_request_url}")

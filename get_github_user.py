@@ -34,13 +34,14 @@ def main():
 
     github_token = getpass.getpass("Enter your GITHUB_TOKEN: ")
 
-    users = ["Nassim Kebbani"]
+    users = ["Nassim Kebbani", "Thibault Deregnaucourt", "Ali ELLOUZE", "Julie Franel", "Olivier Lemaire"]
     organization_name = "TotalEnergiesCode"
 
     for user in users:
         print("****************************************")
         print(f"User: {user}")
-        username = get_github_username(github_token, user, organization_name)
+        username = get_username_by_full_name(github_token, user, organization_name)^$
+        *
         print(f"Username: {username}")
 
 

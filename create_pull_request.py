@@ -1,0 +1,130 @@
+import getpass
+from github import Github
+from dotenv import load_dotenv
+
+
+def create_github_pull_request(github_token, repo_name, merge_request_obj):
+    # Create instance of Github auth
+    g = Github(github_token)
+
+    try:
+        # Get Github repo
+        repo = g.get_repo(repo_name)
+
+        # Create pull request
+        pull_request = repo.create_pull(
+            title=merge_request_obj["title"],
+            body=merge_request_obj["description"],
+            base=merge_request_obj["target_branch"],
+            head=merge_request_obj["source_branch"]
+            # TODO uncomment in prod (it seems that drafted pull requests are not supported in the free Github plan)
+            # draft=merge_request_obj["is_drafted"]
+        )
+
+        assignee = merge_request_obj["assignee"]
+        if assignee and assignee != "None":
+            if is_collaborator(repo, assignee):
+                pull_request.add_to_assignees(assignee)
+            else:
+                print(f"Skipping assignee {assignee} as he is not a collaborator")
+
+        reviewers = merge_request_obj["reviewers"]
+        if reviewers and reviewers != []:
+            for reviewer in reviewers:
+                if is_collaborator(repo, reviewer):
+                    pull_request.create_review_request([reviewer])
+                else:
+                    print(f"Skipping reviewer {reviewer} as he is not a collaborator")
+
+        labels = merge_request_obj["labels"]
+        if labels and labels != "None":
+            labels = [label.strip() for label in labels.split(',')]
+            pull_request.add_to_labels(*labels)
+
+        milestone = merge_request_obj["milestone"]
+        if milestone and milestone != "None":
+            pull_request.set_milestone(milestone)
+
+        # TODO verify existence
+        # pull_request.set_time_tracking(time_estimate, time_spent)
+
+        comments = merge_request_obj["comments"]
+        if comments and comments != "None":
+            for comment in comments:
+                # Add each comment as a separate issue comment
+                pull_request.create_issue_comment(comment)
+
+        # Return pull request URL
+        return pull_request.html_url
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return None
+
+
+
+def is_collaborator(repo, username):
+    """
+    Check if a user is a collaborator of a GitHub repository.
+    """
+    collaborators = repo.get_collaborators()
+    for collaborator in collaborators:
+        if collaborator.login == username:
+            return True
+    return False
+
+
+
+# Usage Exemple
+def main():
+    # github_token = getpass.getpass("Enter your GIHUB_TOKEN: ")
+    load_dotenv()
+    github_token = os.getenv("GIHUB_TOKEN")
+
+    repo_name = "ae-organization/charger"
+
+    mr_url = "https://gitlab.com/symphony-cloud/symphony-local/charge-station-gen3/charger/-/merge_requests/55"
+    mr_id = "55"
+    mr_title = "Added Test fkh/currentWatchdogImpl to antoine/add_central_module "
+    mr_description = "Tes Description for pull request"
+    mr_status = "opened"
+    is_drafted = True
+    source_branch = "fkh/currentWatchdogImpl"
+    target_branch = "antoine/add_central_module"
+    assignee = "Ali ELLOUZE"
+    reviewers = ["MariemEllouze", "Heni Ellouze", "fawzi KHABER"]
+    labels = "sw0.8"
+    milestone = "None"
+    time_estimate = "0h"
+    time_spent = "0h"
+    mr_comments = ['Test comment 1', 'Test comment 2', 'Test comment 3']
+
+
+    # Create a merge request object
+    merge_request_obj = {
+        "url": mr_url,
+        "id": mr_id,
+        "title": mr_title,
+        "description": mr_description,
+        "status": mr_status,
+        "is_drafted": is_drafted,
+        "source_branch": source_branch,
+        "target_branch": target_branch,
+        "assignee": assignee,
+        "reviewers": reviewers,
+        "labels": labels,
+        "milestone": milestone,
+        "time_estimate": time_estimate,
+        "total_time_spent": time_spent,
+        "comments": mr_comments
+    }   
+
+    pull_request_url = create_github_pull_request(github_token, repo_name, merge_request_obj)
+
+    if pull_request_url:
+        print(f"Pull request créée avec succès : {pull_request_url}")
+    else:
+        print("La création de la pull request a échoué.")
+
+if __name__ == "__main__":
+    main()

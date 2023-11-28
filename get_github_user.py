@@ -20,8 +20,6 @@ def get_username_by_full_name(github_token, member_full_name, organization_name)
     
     # Get the members of the organization
     members = org.get_members()
-
-    print(f"################ Memebers: {members}")
     
     # Search for the member by full name and return their username
     for member in members:
@@ -36,7 +34,7 @@ def main():
 
     github_token = getpass.getpass("Enter your GITHUB_TOKEN: ")
 
-    users = ["Nassim Kebbani", "Thibault Deregnaucourt", "Ali ELLOUZE", "Julie Franel", "Olivier Lemaire"]
+    users = ["Nassim Kebbani"]
     organization_name = "TotalEnergiesCode"
 
     for user in users:

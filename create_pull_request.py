@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 
 
 def create_github_pull_request(github_token, repo_name, merge_request_obj):
+    print(f"github_token: {github_token}")
+
     # Create instance of Github auth
     g = Github(github_token)
 

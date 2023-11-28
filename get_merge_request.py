@@ -43,9 +43,9 @@ def get_merge_requests_for_private_project(gitlab_url, gitlab_token, project_nam
             source_branch = merge_request.source_branch
             target_branch = merge_request.target_branch
             assignee = merge_request.assignee["name"] if merge_request.assignee else "None"
-            reviewers = [reviewer["name"] for reviewer in merge_request.reviewers] if merge_request.reviewers else "None"
+            reviewers = [reviewer["name"] for reviewer in merge_request.reviewers] if merge_request.reviewers else []
             # TODO verify why some mr labels are printed "N,o,n,e" and not "None"
-            labels = merge_request.labels if merge_request.labels else "None"
+            labels = merge_request.labels if merge_request.labels else []
             milestone = merge_request.milestone["title"] if merge_request.milestone else "None"
             # TODO: Verify the existence of Time Tracking in GitLab Merge Requests
             time_tracking = {
@@ -56,7 +56,8 @@ def get_merge_requests_for_private_project(gitlab_url, gitlab_token, project_nam
             notes_list = merge_request.notes.list()
             if notes_list:
                 for note in notes_list:
-                    mr_comments.append(f"{note.body}") 
+                    # mr_comments.append(f"{note.body}")
+                    mr_comments.insert(0, f"{note.body}") 
              
 
             # Create a merge request object

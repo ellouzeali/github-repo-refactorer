@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 
 
 def create_github_pull_request(github_token, repo_name, merge_request_obj):
-    print(f"github_token: {github_token}")
 
     # Create instance of Github auth
     g = Github(github_token)
@@ -30,16 +29,26 @@ def create_github_pull_request(github_token, repo_name, merge_request_obj):
 
         assignee = merge_request_obj["assignee"]
         if assignee and assignee != "None":
-            if is_collaborator(repo, assignee):
-                pull_request.add_to_assignees(assignee)
+
+            print(f"Assignee: {assignee}")
+            username = get_github_username(g, assignee)
+            print(f"Username: {username}")
+
+            if is_collaborator(repo, username):
+                pull_request.add_to_assignees(username)
             else:
                 print(f"Skipping assignee {assignee} as he is not a collaborator")
 
         reviewers = merge_request_obj["reviewers"]
         if reviewers and reviewers != []:
             for reviewer in reviewers:
-                if is_collaborator(repo, reviewer):
-                    pull_request.create_review_request([reviewer])
+
+                print(f"Reviewer: {reviewer}")
+                username = get_github_username(g, reviewer)
+                print(f"Username: {username}")                
+
+                if is_collaborator(repo, username):
+                    pull_request.create_review_request([username])
                 else:
                     print(f"Skipping reviewer {reviewer} as he is not a collaborator")
 
@@ -80,6 +89,12 @@ def is_collaborator(repo, username):
             return True
     return False
 
+
+def get_github_username(github, full_name):
+    users = github.search_users(full_name + " in:fullname")
+    for user in users:
+        return user.login
+    return None
 
 
 # Usage Exemple

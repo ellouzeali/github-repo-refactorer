@@ -89,14 +89,14 @@ def main():
 
 
     gitlab_url = "https://gitlab.com"
-    # private_token = getpass.getpass("Enter your GITLAB_TOKEN: ")
+    # gitlab_token = getpass.getpass("Enter your GITLAB_TOKEN: ")
     load_dotenv()
     gitlab_token = os.getenv("GITLAB_TOKEN")
 
     project_name_with_namespace = "symphony-cloud/symphony-local/charge-station-gen3/charger"
     # symphony-cloud/user-experience/guis/g2smart-angular
     # symphony-cloud/infrastructure/core/infra-manager.git"
-    merge_requests = get_merge_requests_for_private_project(gitlab_url, private_token, project_name_with_namespace)
+    merge_requests = get_merge_requests_for_private_project(gitlab_url, gitlab_token, project_name_with_namespace)
 
     print("===> Merge Requests: ")
     for mr in merge_requests:

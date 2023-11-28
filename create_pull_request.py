@@ -103,7 +103,7 @@ def get_username_by_full_name(github, organization_name, member_full_name):
     org = github.get_organization(organization_name)
     
     # Get the members of the organization and filter by full name
-    members = org.get_members(query=member_full_name)
+    members = org.get_members(filter=member_full_name)
     
     # Return the username of the first member found
     if members.totalCount > 0:

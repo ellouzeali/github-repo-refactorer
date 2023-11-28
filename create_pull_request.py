@@ -122,6 +122,7 @@ def get_organization_members(organization_name, github_token):
     
     # Get the members of the organization and create a list of dictionaries
     for member in org.get_members():
+        print(f"Member: {member}")
         member_details = {
             "full_name": member.name,
             "user_name": member.login

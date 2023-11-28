@@ -71,7 +71,7 @@ def create_github_pull_request(github_token, organization_name, repo_name, merge
                 pull_request.create_issue_comment(comment)
 
         # Add Gitlab merge request urls as comment
-        last_comment = f"Gitlab Merge Request URL: {merge_request_obj["mr_url"]}"
+        last_comment = f"Gitlab Merge Request URL: {merge_request_obj['mr_url']}"
         pull_request.create_issue_comment(last_comment)
 
         # Return pull request URL

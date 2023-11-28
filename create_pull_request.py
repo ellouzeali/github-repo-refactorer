@@ -4,7 +4,7 @@ from github import Github
 from dotenv import load_dotenv
 
 
-def create_github_pull_request(github_token, organization_name, repo_name, merge_request_obj):
+def create_github_pull_request(github_token, organization_name, repo_name, merge_request_obj, org_members):
 
     # Create instance of Github auth
     g = Github(github_token)
@@ -31,7 +31,7 @@ def create_github_pull_request(github_token, organization_name, repo_name, merge
         if assignee and assignee != "None":
 
             print(f"Assignee: {assignee}")
-            username = get_username_by_full_name(g, organization_name, assignee)
+            username = get_username_by_full_name(org_members, assignee)
             print(f"Username: {username}")
 
             if is_collaborator(repo, username):
@@ -44,7 +44,7 @@ def create_github_pull_request(github_token, organization_name, repo_name, merge
             for reviewer in reviewers:
 
                 print(f"Reviewer: {reviewer}")
-                username = get_username_by_full_name(g, organization_name, reviewer)
+                username = get_username_by_full_name(org_members, reviewer)
                 print(f"Username: {username}")                
 
                 if is_collaborator(repo, username):
@@ -90,23 +90,29 @@ def is_collaborator(repo, username):
     return False
 
 
-def get_github_username(github, full_name):
-    users = github.search_users(full_name + " in:fullname")
-    for user in users:
-        return user.login
-    return None
+# def get_github_username(github, full_name):
+#     users = github.search_users(full_name + " in:fullname")
+#     for user in users:
+#         return user.login
+#     return None
 
 
-def get_username_by_full_name(github, organization_name, member_full_name):
+# def get_username_by_full_name(github, organization_name, member_full_name):
     
-    # Get the organization
-    org = github.get_organization(organization_name)
+#     # Get the organization
+#     org = github.get_organization(organization_name)
     
-    # Get the members of the organization and filter by full name
-    for member in org.get_members():
-        if member.name == member_full_name:
-            return member.login
-    
+#     # Get the members of the organization and filter by full name
+#     for member in org.get_members():
+#         if member.name == member_full_name:
+#             return member.login
+#     return None  # Return None if the member is not found
+
+
+def get_username_by_full_name(members_list, user_full_name):
+    for member in members_list:
+        if member["full_name"].str.lower() == user_full_name.str.lower():
+            return member["user_name"]
     return None  # Return None if the member is not found
 
 
@@ -122,7 +128,6 @@ def get_organization_members(organization_name, github_token):
     
     # Get the members of the organization and create a list of dictionaries
     for member in org.get_members():
-        print(f"Member: {member}")
         member_details = {
             "full_name": member.name,
             "user_name": member.login
@@ -144,52 +149,52 @@ def main():
     organization_name = "ae-organization"
 
 
-    members = get_organization_members(organization_name, github_token)
+    org_members = get_organization_members(organization_name, github_token)
 
-    print(f"Members: {members}")
+    print(f"Members: {org_members}")
 
-    # mr_url = "https://gitlab.com/symphony-cloud/symphony-local/charge-station-gen3/charger/-/merge_requests/55"
-    # mr_id = "55"
-    # mr_title = "Added Test fkh/currentWatchdogImpl to antoine/add_central_module "
-    # mr_description = "Tes Description for pull request"
-    # mr_status = "opened"
-    # is_drafted = True
-    # source_branch = "fkh/currentWatchdogImpl"
-    # target_branch = "antoine/add_central_module"
-    # assignee = "Ali ELLOUZE"
-    # reviewers = ["MariemEllouze", "Heni Ellouze", "fawzi KHABER"]
-    # labels = "sw0.8"
-    # milestone = "None"
-    # time_estimate = "0h"
-    # time_spent = "0h"
-    # mr_comments = ['Test comment 1', 'Test comment 2', 'Test comment 3']
+    mr_url = "https://gitlab.com/symphony-cloud/symphony-local/charge-station-gen3/charger/-/merge_requests/55"
+    mr_id = "55"
+    mr_title = "Added Test fkh/currentWatchdogImpl to antoine/add_central_module "
+    mr_description = "Tes Description for pull request"
+    mr_status = "opened"
+    is_drafted = True
+    source_branch = "fkh/currentWatchdogImpl"
+    target_branch = "antoine/add_central_module"
+    assignee = "ali ELLOUZE"
+    reviewers = ["MariemEllouze", "Heni Ellouze", "fawzi KHABER"]
+    labels = "sw0.8"
+    milestone = "None"
+    time_estimate = "0h"
+    time_spent = "0h"
+    mr_comments = ['Test comment 1', 'Test comment 2', 'Test comment 3']
 
 
-    # # Create a merge request object
-    # merge_request_obj = {
-    #     "url": mr_url,
-    #     "id": mr_id,
-    #     "title": mr_title,
-    #     "description": mr_description,
-    #     "status": mr_status,
-    #     "is_drafted": is_drafted,
-    #     "source_branch": source_branch,
-    #     "target_branch": target_branch,
-    #     "assignee": assignee,
-    #     "reviewers": reviewers,
-    #     "labels": labels,
-    #     "milestone": milestone,
-    #     "time_estimate": time_estimate,
-    #     "total_time_spent": time_spent,
-    #     "comments": mr_comments
-    # }   
+    # Create a merge request object
+    merge_request_obj = {
+        "url": mr_url,
+        "id": mr_id,
+        "title": mr_title,
+        "description": mr_description,
+        "status": mr_status,
+        "is_drafted": is_drafted,
+        "source_branch": source_branch,
+        "target_branch": target_branch,
+        "assignee": assignee,
+        "reviewers": reviewers,
+        "labels": labels,
+        "milestone": milestone,
+        "time_estimate": time_estimate,
+        "total_time_spent": time_spent,
+        "comments": mr_comments
+    }   
 
-    # pull_request_url = create_github_pull_request(github_token, organization_name, repo_name, merge_request_obj)
+    pull_request_url = create_github_pull_request(github_token, organization_name, repo_name, merge_request_obj, org_members)
 
-    # if pull_request_url:
-    #     print(f"Pull request was successfully created : {pull_request_url}")
-    # else:
-    #     print("Failed to create pull request")
+    if pull_request_url:
+        print(f"Pull request was successfully created : {pull_request_url}")
+    else:
+        print("Failed to create pull request")
 
 if __name__ == "__main__":
     main()

@@ -82,9 +82,9 @@ def is_collaborator(repo, username):
 
 # Usage Exemple
 def main():
-    # github_token = getpass.getpass("Enter your GIHUB_TOKEN: ")
-    load_dotenv()
-    github_token = os.getenv("GIHUB_TOKEN")
+    github_token = getpass.getpass("Enter your GIHUB_TOKEN: ")
+    # load_dotenv()
+    # github_token = os.getenv("GIHUB_TOKEN")
 
     repo_name = "ae-organization/charger"
 

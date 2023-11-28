@@ -111,7 +111,7 @@ def is_collaborator(repo, username):
 
 def get_username_by_full_name(members_list, user_full_name):
     for member in members_list:
-        if member["full_name"].str.lower() == user_full_name.str.lower():
+        if member["full_name"].lower() == user_full_name.lower():
             return member["user_name"]
     return None  # Return None if the member is not found
 

@@ -10,6 +10,26 @@ def get_github_username(github_token, full_name, organization_name):
     return None
 
 
+
+def get_username_by_full_name(github_token, member_full_name, organization_name):
+    # Authenticate to GitHub
+    g = Github(github_token)
+    
+    # Get the organization
+    org = g.get_organization(organization_name)
+    
+    # Get the members of the organization
+    members = org.get_members()
+
+    print(f"################ Memebers: {}members")
+    
+    # Search for the member by full name and return their username
+    for member in members:
+        if member.name == member_full_name:
+            return member.login
+    
+    return None  # Return None if the member is not found
+
 # Example usage
 def main():
 
@@ -22,8 +42,12 @@ def main():
     for user in users:
         print("****************************************")
         print(f"User: {user}")
-        username = get_github_username(github_token, user, organization_name)
+        username = get_username_by_full_name(github_token, user, organization_name)
         print(f"Username: {username}")
+
+
+
+
 
 
 if __name__ == "__main__":

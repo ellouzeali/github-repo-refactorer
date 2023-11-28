@@ -9,8 +9,12 @@ def create_github_pull_request(github_token, repo_name, merge_request_obj):
     g = Github(github_token)
 
     try:
+        print("Connection to github repo")
+
         # Get Github repo
         repo = g.get_repo(repo_name)
+        
+        print("Creating pull request")
 
         # Create pull request
         pull_request = repo.create_pull(
@@ -123,9 +127,9 @@ def main():
     pull_request_url = create_github_pull_request(github_token, repo_name, merge_request_obj)
 
     if pull_request_url:
-        print(f"Pull request créée avec succès : {pull_request_url}")
+        print(f"Pull request was successfully created : {pull_request_url}")
     else:
-        print("La création de la pull request a échoué.")
+        print("Failed to create pull request")
 
 if __name__ == "__main__":
     main()

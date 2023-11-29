@@ -22,8 +22,8 @@ def main():
 
 
     # TODO recupare dynamic list of prject
-    gitlab_project_name = "symphony-cloud/symphony-local/charge-station-gen3/charger"
-    github_project_name = "ae-organization/charger"
+    gitlab_project_name = "test-migration-al105/testmigrationproject-al105"
+    github_project_name = "TotalEnergiesCodeDev/testmigrationproject-al105"
 
     # symphony-cloud/user-experience/guis/g2smart-angular
     # symphony-cloud/infrastructure/core/infra-manager.git"

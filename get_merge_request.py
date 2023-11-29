@@ -53,7 +53,7 @@ def get_merge_requests_for_private_project(gitlab_url, gitlab_token, project_nam
                 "total_time_spent": merge_request.time_stats()["total_time_spent"]
             }
             mr_comments = []
-            notes_list = merge_request.notes.list()
+            notes_list = merge_request.notes.list(get_all=True)
             if notes_list:
                 for note in notes_list:
                     # mr_comments.append(f"{note.body}")

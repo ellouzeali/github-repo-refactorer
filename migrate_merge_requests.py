@@ -3,6 +3,9 @@ import gitlab
 import getpass
 from github import Github
 from dotenv import load_dotenv
+from get_merge_request import get_merge_requests_for_private_project
+from create_pull_request import create_github_pull_request, get_organization_members
+
 
 
 

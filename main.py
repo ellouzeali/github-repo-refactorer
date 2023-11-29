@@ -35,7 +35,9 @@ def main():
         sys.exit(1)
     try:
         had_error = False
-        had_issue = False
+        had_scm_issue = False
+        had_az_issue = False
+
         error_message = ""
 
         # Define the full path to the log file
@@ -144,13 +146,13 @@ def main():
                 with open(scm_fr_file_path, "a") as file:
                     file.write(old_gitlab_repo_url + '\t' + github_repo_url + '\n')
 
-            if had_azure_devops_issue:
+            if had_az_issue:
                 print(f"{repo_name} encountered some issues in updating Azure DevOps pipelines")
                 logging.warning(f'{repo_name} encountered some issues in updating Azure DevOps pipelines')
                 with open(az_fr_file_path, "a") as file:
                     file.write(old_gitlab_repo_url + '\t' + github_repo_url + '\n')
 
-            if not had_scm_issue and not had_azure_devops_issue:
+            if not had_scm_issue and not had_az_issue:
                 print(f"{repo_name} has been successfully refactored")
                 logging.info(f'{repo_name} has been successfully refactored')
                 with open(sr_file_path, "a") as file:

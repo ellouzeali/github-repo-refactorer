@@ -10,13 +10,12 @@ def get_project_list (file_path):
             old_gitlab_repo_url = row.get('Old_Gitlab_URL')
             github_repo_url = row.get('Github_URL')
 
-            if not old_gitlab_repo_url or not github_repo_url or not new_repo_name:
+            if not old_gitlab_repo_url or not github_repo_url:
                 raise ValueError(f"Missing data on line {line_number}.")
 
             project = {
                 "old_gitlab_repo_url": old_gitlab_repo_url,
                 "github_repo_url": github_repo_url,
-                "new_repo_name": new_repo_name
             }
             
             project_list.append(project)

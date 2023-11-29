@@ -9,7 +9,6 @@ def get_project_list (file_path):
         for line_number, row in enumerate(reader, start=2):  # Start at line 2 to account for header
             old_gitlab_repo_url = row.get('Old_Gitlab_URL')
             github_repo_url = row.get('Github_URL')
-            new_repo_name = row.get('New_Repo_Name')
 
             if not old_gitlab_repo_url or not github_repo_url or not new_repo_name:
                 raise ValueError(f"Missing data on line {line_number}.")

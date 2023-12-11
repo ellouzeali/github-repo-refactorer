@@ -128,24 +128,32 @@ def get_organization_members(file_path):
     # Initialize an empty list to store member details
     members_list = []
 
-    # Read the members-list.txt file
-    with open(file_path, 'r') as file:
-        # Skip the header line
-        header = file.readline()
-        
-        # Iterate through the remaining lines
-        for line in file:
-            # Split the line into full name and username
-            full_name, user_name = line.strip().split('\t')
-            
-            # Create a dictionary for each member
-            member_details = {
-                "full_name": full_name,
-                "user_name": user_name
-            }
-            
-            # Append the member details to the list
-            members_list.append(member_details)
+    try:
+        # Read the members-list.txt file
+        with open(file_path, 'r') as file:
+            # Skip the header line
+            header = file.readline()
+            # Iterate through the remaining lines
+            for line_number, line in enumerate(file, start=2):  # Start line numbering from 2 (skipping header)
+                try:
+                    # Split the line into full name and username
+                    full_name, user_name = line.strip().split('\t')
+                    # Create a dictionary for each member
+                    member_details = {
+                        "full_name": full_name,
+                        "user_name": user_name
+                    }
+                    # Append the member details to the list
+                    members_list.append(member_details)
+                except ValueError:
+                    # Handle improper line formatting (e.g., not enough values to unpack)
+                    print(f"Error in line {line_number}: Improper line formatting")
+    except FileNotFoundError:
+        # Handle file not found error
+        print(f"Error: File not found - {file_path}")
+    except Exception as e:
+        # Handle other unexpected errors
+        print(f"An unexpected error occurred: {e}")
 
     return members_list
 

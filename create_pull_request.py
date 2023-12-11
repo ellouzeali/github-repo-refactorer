@@ -124,25 +124,31 @@ def get_username_by_full_name(members_list, user_full_name):
         return None
 
 
-def get_organization_members(organization_name, github_token):
-    # Authenticate to GitHub
-    g = Github(github_token)
-    
-    # Get the organization
-    org = g.get_organization(organization_name)
-    
+def get_organization_members(file_path):
     # Initialize an empty list to store member details
     members_list = []
-    
-    # Get the members of the organization and create a list of dictionaries
-    for member in org.get_members():
-        member_details = {
-            "full_name": member.name,
-            "user_name": member.login
-        }
-        members_list.append(member_details)
-    
+
+    # Read the members-list.txt file
+    with open(file_path, 'r') as file:
+        # Skip the header line
+        header = file.readline()
+        
+        # Iterate through the remaining lines
+        for line in file:
+            # Split the line into full name and username
+            full_name, user_name = line.strip().split('\t')
+            
+            # Create a dictionary for each member
+            member_details = {
+                "full_name": full_name,
+                "user_name": user_name
+            }
+            
+            # Append the member details to the list
+            members_list.append(member_details)
+
     return members_list
+
 
 
 
@@ -155,9 +161,10 @@ def main():
 
     repo_name = "ae-organization/charger"
     organization_name = "ae-organization"
+    members_file_path = 'members-list.txt'
 
 
-    org_members = get_organization_members(organization_name, github_token)
+    org_members = get_organization_members(members_file_path)
 
     print(f"Members: {org_members}")
 

@@ -19,6 +19,7 @@ def main():
     gitlab_token = os.getenv("GITLAB_TOKEN")
     github_token = os.getenv("GITHUB_TOKEN")
     organization_name = os.getenv("GITHUB_ORG_NAME")
+    members_file_path = 'members-list.txt'
 
 
     # TODO recupare dynamic list of prject
@@ -32,7 +33,8 @@ def main():
     # symphony-cloud/infrastructure/core/infra-manager.git"
     merge_requests = get_merge_requests_for_private_project(gitlab_url, gitlab_token, gitlab_project_name)
 
-    org_members = get_organization_members(organization_name, github_token)
+
+    org_members = get_organization_members(members_file_path)
 
     print("===> Merge Requests: ")
     for merge_request_obj in merge_requests:

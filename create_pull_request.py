@@ -161,7 +161,7 @@ def main():
 
     print(f"Members: {org_members}")
 
-    mr_url = "https://gitlab.com/symphony-cloud/symphony-local/charge-station-gen3/charger/-/merge_requests/55"
+    mr_url = "https://gitlab.com/symphony-cloud/symphony-local/charge-station-gen3/charger/-/merge_requests/102"
     mr_id = "102"
     mr_title = "feature(dbus_server): Dbus server lib with the Evse"
     mr_description = """Voici une proposition d'implem d'un server DBus. 

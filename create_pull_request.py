@@ -162,20 +162,24 @@ def main():
     print(f"Members: {org_members}")
 
     mr_url = "https://gitlab.com/symphony-cloud/symphony-local/charge-station-gen3/charger/-/merge_requests/55"
-    mr_id = "55"
-    mr_title = "Added Test fkh/currentWatchdogImpl to antoine/add_central_module "
-    mr_description = "Tes Description for pull request"
+    mr_id = "102"
+    mr_title = "feature(dbus_server): Dbus server lib with the Evse"
+    mr_description = """Voici une proposition d'implem d'un server DBus. 
+    - Ce n'est absolument pas testé, je ferais ça à mon retour. 
+    - il y a clairement du code à factoriser et a passer sous qtoverload, je ferais ça une fois testé.
+        -> Mais ça compile, et vous pouvez jeter un oeil si ça vous intéresse. 
+    - Pour ce qui est de l'archi, dites moi si ça vous va: Je pensais faire une lib dbus_client par la suite. La lib interface introduite ici serait utilisé comme api de la lib dbus_client, ce qui nous permetras d'avoir la même api que dans la lib monitoring."""
     mr_status = "opened"
-    is_drafted = True
-    source_branch = "fkh/currentWatchdogImpl"
-    target_branch = "antoine/add_central_module"
+    is_drafted = False
+    source_branch = "jon/dbus/evse-interface"
+    target_branch = "0.9"
     assignee = "ali ELLOUZE"
     reviewers = ["MariemEllouze", "Heni Ellouze", "fawzi KHABER"]
-    labels = "sw0.8"
+    labels = "sw0.9"
     milestone = "None"
     time_estimate = "0h"
     time_spent = "0h"
-    mr_comments = ['Test comment 1', 'Test comment 2', 'Test comment 3']
+    mr_comments = ['assigned to @jonpetri', 'added 5 commits\n\n<ul><li>e67d79e2 - Fix Fextender driver</li><li>e8cd015f - Invert msb/lsb Temperature value</li><li>3b420971 - build: Ignore -Weffc++ on some qt headers</li><li>f62acd49 - refactor(interface): Evse interface definition</li><li>fee872ef - feature(dbus_server): Dbus server lib with the Evse</li></ul>\n\n[Compare with previous version](/symphony-cloud/symphony-local/charge-station-gen3/charger/-/merge_requests/102/diffs?diff_id=862244625&start_sha=bb75c2334a297677e38d0351b67f5354f02a766c)', 'approved this merge request', 'approved this merge request']
 
 
     # Create a merge request object

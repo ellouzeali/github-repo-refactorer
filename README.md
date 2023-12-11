@@ -6,6 +6,7 @@ This Python script renames GitHub repositories and performs code transformations
 
 ```bash
 sudo apt install python3-pip
+pip install python-dotenv
 pip install python-gitlab
 pip install GitPython
 pip install PyGithub

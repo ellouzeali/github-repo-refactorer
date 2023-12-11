@@ -26,9 +26,10 @@ def main():
     # gitlab_project_name = "test-migration-al105/testmigrationproject-al105"
     # github_project_name = "TotalEnergiesCodeDev/testmigrationproject-al105"
 
-    gitlab_project_name = "symphony-cloud/symphony-local/charge-station-gen3/charger"
-    github_project_name = "ae-organization/charger"
+    gitlab_project_name = "symphony-cloud/user-experience/guis/g2smart-angular"
+    github_project_name = "ae-organization/g2smart-angular"
 
+    # symphony-cloud/symphony-local/charge-station-gen3/charger
     # symphony-cloud/user-experience/guis/g2smart-angular
     # symphony-cloud/infrastructure/core/infra-manager.git"
     merge_requests = get_merge_requests_for_private_project(gitlab_url, gitlab_token, gitlab_project_name)

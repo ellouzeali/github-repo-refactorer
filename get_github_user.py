@@ -40,8 +40,7 @@ def main():
     for user in users:
         print("****************************************")
         print(f"User: {user}")
-        username = get_username_by_full_name(github_token, user, organization_name)^$
-        *
+        username = get_username_by_full_name(github_token, user, organization_name)
         print(f"Username: {username}")
 
 

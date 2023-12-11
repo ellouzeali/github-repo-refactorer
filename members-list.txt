@@ -1,7 +1,7 @@
 Full_name	Username
-Ali Ellouze ellouzeali
-Mariem Ellouze  MariemEllouze
-Heni Ellouze    ellouze103
+Ali Ellouze	ellouzeali
+Mariem Ellouze	MariemEllouze
+Heni Ellouze	ellouze103
 Julien Revol	AJ1087334_totalen
 Laurent Gutierrez	AJ0221917_totalen
 Mehdi Aichouch	AL1107378_totalen

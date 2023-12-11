@@ -189,7 +189,7 @@ def main():
     source_branch = "jon/dbus/evse-interface"
     target_branch = "0.9"
     assignee = "ali ELLOUZE"
-    reviewers = ["MariemEllouze", "Heni Ellouze", "fawzi KHABER"]
+    reviewers = ["Mariem Ellouze", "Heni Ellouze", "fawzi KHABER"]
     labels = ["sw0.9", "test"]
     milestone = "None"
     time_estimate = "0h"

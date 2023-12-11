@@ -53,8 +53,8 @@ def create_github_pull_request(github_token, organization_name, repo_name, merge
                     print(f"Skipping reviewer {reviewer} as he is not a collaborator")
 
         labels = merge_request_obj["labels"]
-        if labels and labels != "None":
-            labels = [label.strip() for label in labels.split(',')]
+        if labels and labels != []:
+            # labels = [label.strip() for label in labels.split(',')]
             pull_request.add_to_labels(*labels)
 
         milestone = merge_request_obj["milestone"]
@@ -175,7 +175,7 @@ def main():
     target_branch = "0.9"
     assignee = "ali ELLOUZE"
     reviewers = ["MariemEllouze", "Heni Ellouze", "fawzi KHABER"]
-    labels = "sw0.9"
+    labels = ["sw0.9", "test"]
     milestone = "None"
     time_estimate = "0h"
     time_spent = "0h"

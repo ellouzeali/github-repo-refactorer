@@ -6,7 +6,7 @@ import getpass
 import logging
 from github import Github
 from dotenv import load_dotenv
-from utils import get_project_list
+from utils import get_project_list, extract_repository_path
 from get_merge_request import get_merge_requests_for_private_project
 from create_pull_request import create_github_pull_request, get_organization_members
 
@@ -56,8 +56,6 @@ def main():
     logging.basicConfig(filename=log_file_path, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s\n')
 
 
-
-    # TODO recupare dynamic list of prject
     
     # Get list of projects
     projects = get_project_list(project_list_file_path)
@@ -76,21 +74,24 @@ def main():
         # Extract the current repository name from the GitHub URL
         repo_name = github_repo_url.split('/')[-1].replace(".git", "")
 
+        gitlab_repo_path = extract_repository_path (old_gitlab_repo_url)
+        github_repo_path = extract_repository_path (github_repo_url)
+
         logging.info(f'########################################### {repo_name} ###########################################')
-        logging.info(f'Old Gitlab Repo URL: {old_gitlab_repo_url}')
-        logging.info(f'Github Repo URL: {github_repo_url}')
+        logging.info(f'Gitlab Repo Path: {gitlab_repo_path}')
+        logging.info(f'Github Repo Path: {github_repo_path}')
 
 
-        # gitlab_project_name = "test-migration-al105/testmigrationproject-al105"
-        # github_project_name = "TotalEnergiesCodeDev/testmigrationproject-al105"
+        # gitlab_repo_path = "test-migration-al105/testmigrationproject-al105"
+        # github_repo_path = "TotalEnergiesCodeDev/testmigrationproject-al105"
 
-        gitlab_project_name = "symphony-cloud/user-experience/guis/g2smart-angular"
-        github_project_name = "ae-organization/g2smart-angular"
+        # gitlab_repo_path = "symphony-cloud/user-experience/guis/g2smart-angular"
+        # github_repo_path = "ae-organization/g2smart-angular"
 
         # symphony-cloud/symphony-local/charge-station-gen3/charger
         # symphony-cloud/user-experience/guis/g2smart-angular
         # symphony-cloud/infrastructure/core/infra-manager.git"
-        merge_requests = get_merge_requests_for_private_project(gitlab_url, gitlab_token, gitlab_project_name)
+        merge_requests = get_merge_requests_for_private_project(gitlab_url, gitlab_token, gitlab_repo_path)
 
 
         org_members = get_organization_members(members_file_path)
@@ -111,10 +112,10 @@ def main():
             print(f"Milestone: {merge_request_obj['milestone']}")
             print(f"Time Estimate: {merge_request_obj['time_estimate']}h")
             print(f"Time Spent: {merge_request_obj['total_time_spent']}h")
-            print(f"Comments: {merge_request_obj['comments']}")
+            # print(f"Comments: {merge_request_obj['comments']}")
             print("\n")
 
-            pull_request_url = create_github_pull_request(github_token, organization_name, github_project_name, merge_request_obj, org_members)
+            pull_request_url = create_github_pull_request(github_token, organization_name, github_repo_path, merge_request_obj, org_members)
 
             if pull_request_url:
                 print(f"Pull request was successfully created : {pull_request_url}")

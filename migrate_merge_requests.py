@@ -37,6 +37,8 @@ def main():
             print("One or more environment variables are missing.")
             sys.exit(1)
 
+        had_error = False
+        error_message = ""
 
         # Define the full path to the log file
         timestamp = time.strftime("%Y%m%d%H%M%S")
@@ -65,7 +67,10 @@ def main():
         console_handler.setFormatter(console_formatter)
 
         # Add the console handler to the logger
-        logging.getLogger().addHandler(console_handler)    
+        logging.getLogger().addHandler(console_handler)
+
+        # Get list of members
+        org_members = get_organization_members(members_file_path)    
         
         # Get list of projects
         projects = get_project_list(project_list_file_path)
@@ -101,35 +106,41 @@ def main():
                 # symphony-cloud/symphony-local/charge-station-gen3/charger
                 # symphony-cloud/user-experience/guis/g2smart-angular
                 # symphony-cloud/infrastructure/core/infra-manager.git"
-                merge_requests = get_merge_requests_for_private_project(gitlab_url, gitlab_token, gitlab_repo_path)
 
+                logging.info(f'Get all open Merge requests of repo: {repo_name}')
+                had_error, error_message, merge_requests = get_merge_requests_for_private_project(gitlab_url, gitlab_token, gitlab_repo_path)
 
-                org_members = get_organization_members(members_file_path)
+                if had_error :
+                    logging.error(f"{error_message}")
+                elif merge_requests == []:
+                    logging.info("===> No open merge requests were found in this GitLab repository.")
+                else:
+                    logging.info("===> Merge Requests: ")
+                    
+                    for merge_request_obj in merge_requests:
+                        logging.info(f"******************************* Merge Request ID: {merge_request_obj['id']} *****************************************")
+                        logging.info(f"URL: {merge_request_obj['url']}")
+                        logging.info(f"Title: {merge_request_obj['title']}")
+                        logging.info(f"Description: {merge_request_obj['description']}")
+                        logging.info(f"Status: {merge_request_obj['status']}")
+                        logging.info(f"Is Drafted: {merge_request_obj['is_drafted']}")
+                        logging.info(f"Source Branch: {merge_request_obj['source_branch']}")
+                        logging.info(f"Target Branch: {merge_request_obj['target_branch']}")
+                        logging.info(f"Assignee: {merge_request_obj['assignee']}")
+                        logging.info(f"Reviewers: {', '.join(merge_request_obj['reviewers'])}")
+                        logging.info(f"Labels: {', '.join(merge_request_obj['labels'])}")
+                        logging.info(f"Milestone: {merge_request_obj['milestone']}")
+                        logging.info(f"Time Estimate: {merge_request_obj['time_estimate']}h")
+                        logging.info(f"Time Spent: {merge_request_obj['total_time_spent']}h")
+                        # logging.info(f"Comments: {merge_request_obj['comments']}")
 
-                logging.info("===> Merge Requests: ")
-                for merge_request_obj in merge_requests:
-                    logging.info(f"******************************* Merge Request ID: {merge_request_obj['id']} *****************************************")
-                    logging.info(f"URL: {merge_request_obj['url']}")
-                    logging.info(f"Title: {merge_request_obj['title']}")
-                    logging.info(f"Description: {merge_request_obj['description']}")
-                    logging.info(f"Status: {merge_request_obj['status']}")
-                    logging.info(f"Is Drafted: {merge_request_obj['is_drafted']}")
-                    logging.info(f"Source Branch: {merge_request_obj['source_branch']}")
-                    logging.info(f"Target Branch: {merge_request_obj['target_branch']}")
-                    logging.info(f"Assignee: {merge_request_obj['assignee']}")
-                    logging.info(f"Reviewers: {', '.join(merge_request_obj['reviewers'])}")
-                    logging.info(f"Labels: {', '.join(merge_request_obj['labels'])}")
-                    logging.info(f"Milestone: {merge_request_obj['milestone']}")
-                    logging.info(f"Time Estimate: {merge_request_obj['time_estimate']}h")
-                    logging.info(f"Time Spent: {merge_request_obj['total_time_spent']}h")
-                    # logging.info(f"Comments: {merge_request_obj['comments']}")
+                        pull_request_url = create_github_pull_request(github_token, organization_name, github_repo_path, merge_request_obj, org_members)
 
-                    pull_request_url = create_github_pull_request(github_token, organization_name, github_repo_path, merge_request_obj, org_members)
+                        if pull_request_url:
+                            logging.info(f"===> Pull request was successfully created : {pull_request_url} \n")
+                        else:
+                            logging.error("Failed to create pull request \n")
 
-                    if pull_request_url:
-                        logging.info(f"===> Pull request was successfully created : {pull_request_url} \n")
-                    else:
-                        logging.error("Failed to create pull request \n")
 
             except gitlab.GitlabError as e:
                 logging.error(f"GitLab error: {str(e)}")

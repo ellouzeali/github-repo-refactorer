@@ -5,6 +5,9 @@ from dotenv import load_dotenv
 
 
 def get_merge_requests_for_private_project(gitlab_url, gitlab_token, project_name_with_namespace):
+
+    had_error = False
+    error_message = ""
     merge_requests_list = []  # Create a list to store merge request objects
 
     print("Connecting to Gitlab")
@@ -78,15 +81,18 @@ def get_merge_requests_for_private_project(gitlab_url, gitlab_token, project_nam
                 "comments": mr_comments
             }            
             merge_requests_list.append(merge_request_obj)
-    
+
+        # Reverse the order of merge requests
+        merge_requests_list = reversed(merge_requests_list)
+
+    except gitlab.GitlabError as e:
+        had_error = True
+        error_message = f"GitLab error: {str(e)}"   
     except Exception as e:
-        print(f"An error occurred: {str(e)}")
-
-
-    # Reverse the order of merge requests
-    merge_requests_list = reversed(merge_requests_list)
-    
-    return merge_requests_list
+        had_error = True
+        error_message = f"An unexpected error occurred: {str(e)}"
+    finally:
+        return had_error, error_message, merge_requests_list
 
 # Example usage
 def main():
@@ -101,7 +107,7 @@ def main():
     # symphony-cloud/symphony-local/charge-station-gen3/charger
     # symphony-cloud/user-experience/guis/g2smart-angular
     # symphony-cloud/infrastructure/core/infra-manager.git"
-    merge_requests = get_merge_requests_for_private_project(gitlab_url, gitlab_token, project_name_with_namespace)
+    had_error, error_message, merge_requests = get_merge_requests_for_private_project(gitlab_url, gitlab_token, project_name_with_namespace)
 
     print("===> Merge Requests: ")
     for mr in merge_requests:

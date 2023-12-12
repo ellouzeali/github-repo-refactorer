@@ -35,10 +35,6 @@ def main():
     merge_requests = get_merge_requests_for_private_project(gitlab_url, gitlab_token, gitlab_project_name)
 
 
-    # Reverse the order of merge requests
-    merge_requests = reversed(merge_requests)
-
-
     org_members = get_organization_members(members_file_path)
 
     print("===> Merge Requests: ")

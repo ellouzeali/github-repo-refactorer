@@ -81,6 +81,10 @@ def get_merge_requests_for_private_project(gitlab_url, gitlab_token, project_nam
     
     except Exception as e:
         print(f"An error occurred: {str(e)}")
+
+
+    # Reverse the order of merge requests
+    merge_requests_list = reversed(merge_requests_list)
     
     return merge_requests_list
 

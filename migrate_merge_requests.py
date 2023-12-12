@@ -55,7 +55,17 @@ def main():
     # Configure logging
     logging.basicConfig(filename=log_file_path, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s\n')
 
+    # Create a console handler and set the level to INFO
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
 
+
+    # Create a formatter and attach it to the console handler
+    console_formatter = logging.Formatter('%(levelname)s - %(message)s')
+    console_handler.setFormatter(console_formatter)
+
+    # Add the console handler to the logger
+    logging.getLogger().addHandler(console_handler)    
     
     # Get list of projects
     projects = get_project_list(project_list_file_path)
@@ -67,10 +77,6 @@ def main():
         old_gitlab_repo_url = project["old_gitlab_repo_url"]
         github_repo_url = project["github_repo_url"]
 
-
-        print(f"Old Gitlab Repo URL: {old_gitlab_repo_url}")
-        print(f"Github Repo URL: {github_repo_url}")
-
         # Extract the current repository name from the GitHub URL
         repo_name = github_repo_url.split('/')[-1].replace(".git", "")
 
@@ -78,6 +84,8 @@ def main():
         github_repo_path = extract_repository_path (github_repo_url)
 
         logging.info(f'########################################### {repo_name} ###########################################')
+        logging.info(f"Gitlab Repo URL: {old_gitlab_repo_url}")
+        logging.info(f"Github Repo URL: {github_repo_url}")
         logging.info(f'Gitlab Repo Path: {gitlab_repo_path}')
         logging.info(f'Github Repo Path: {github_repo_path}')
 
@@ -96,31 +104,30 @@ def main():
 
         org_members = get_organization_members(members_file_path)
 
-        print("===> Merge Requests: ")
+        logging.info("===> Merge Requests: ")
         for merge_request_obj in merge_requests:
-            print(f"******************************* Merge Request ID: {merge_request_obj['id']} *****************************************")
-            print(f"URL: {merge_request_obj['url']}")
-            print(f"Title: {merge_request_obj['title']}")
-            print(f"Description: {merge_request_obj['description']}")
-            print(f"Status: {merge_request_obj['status']}")
-            print(f"Is Drafted: {merge_request_obj['is_drafted']}")
-            print(f"Source Branch: {merge_request_obj['source_branch']}")
-            print(f"Target Branch: {merge_request_obj['target_branch']}")
-            print(f"Assignee: {merge_request_obj['assignee']}")
-            print(f"Reviewers: {', '.join(merge_request_obj['reviewers'])}")
-            print(f"Labels: {', '.join(merge_request_obj['labels'])}")
-            print(f"Milestone: {merge_request_obj['milestone']}")
-            print(f"Time Estimate: {merge_request_obj['time_estimate']}h")
-            print(f"Time Spent: {merge_request_obj['total_time_spent']}h")
+            logging.info(f"******************************* Merge Request ID: {merge_request_obj['id']} *****************************************")
+            logging.info(f"URL: {merge_request_obj['url']}")
+            logging.info(f"Title: {merge_request_obj['title']}")
+            logging.info(f"Description: {merge_request_obj['description']}")
+            logging.info(f"Status: {merge_request_obj['status']}")
+            logging.info(f"Is Drafted: {merge_request_obj['is_drafted']}")
+            logging.info(f"Source Branch: {merge_request_obj['source_branch']}")
+            logging.info(f"Target Branch: {merge_request_obj['target_branch']}")
+            logging.info(f"Assignee: {merge_request_obj['assignee']}")
+            logging.info(f"Reviewers: {', '.join(merge_request_obj['reviewers'])}")
+            logging.info(f"Labels: {', '.join(merge_request_obj['labels'])}")
+            logging.info(f"Milestone: {merge_request_obj['milestone']}")
+            logging.info(f"Time Estimate: {merge_request_obj['time_estimate']}h")
+            logging.info(f"Time Spent: {merge_request_obj['total_time_spent']}h")
             # print(f"Comments: {merge_request_obj['comments']}")
-            print("\n")
 
             pull_request_url = create_github_pull_request(github_token, organization_name, github_repo_path, merge_request_obj, org_members)
 
             if pull_request_url:
-                print(f"Pull request was successfully created : {pull_request_url}")
+                logging.info(f"===> Pull request was successfully created : {pull_request_url} \n")
             else:
-                print("Failed to create pull request")
+                logging.error("Failed to create pull request \n")
 
 
 if __name__ == "__main__":

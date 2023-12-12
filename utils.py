@@ -1,5 +1,5 @@
 import csv
-from urllib.parse import urlparse
+import re
 
 def get_project_list (file_path):
     project_list = []
@@ -28,22 +28,20 @@ def get_project_list (file_path):
 
 
 def extract_repository_path(repo_url):
-    # Parse the URL
-    parsed_url = urlparse(repo_url)
+    # Define patterns to match the repository path
+    github_pattern = re.compile(r'https://github\.com/(.*?)(\.git)?$', re.IGNORECASE)
+    gitlab_pattern = re.compile(r'https://gitlab\.com/(.*?)(\.git)?$', re.IGNORECASE)
 
-    # Extract the path and remove leading/trailing slashes
-    path_parts = parsed_url.path.strip('/').split('/')
+    # Check if the URL is a GitHub or GitLab URL
+    match_github = github_pattern.match(repo_url)
+    match_gitlab = gitlab_pattern.match(repo_url)
 
-    # Check if the URL is from GitHub or GitLab
-    if 'github' in parsed_url.netloc:
-        # GitHub URL structure: /<organization>/<repository>.git
-        return '/'.join(path_parts[1:-1])
-    elif 'gitlab' in parsed_url.netloc:
-        # GitLab URL structure: /<group>/<subgroup>/.../<repository>.git
-        return '/'.join(path_parts[1:-1])
+    if match_github:
+        return match_github.group(1)
+    elif match_gitlab:
+        return match_gitlab.group(1)
     else:
-        # Unsupported repository host
-        raise ValueError(f"Unsupported repository host in URL: {repo_url}")
+        raise ValueError("Invalid repository URL")
     
 
 

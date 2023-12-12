@@ -148,12 +148,15 @@ def get_organization_members(file_path):
                 except ValueError:
                     # Handle improper line formatting (e.g., not enough values to unpack)
                     print(f"Error in line {line_number}: Improper line formatting")
+                    raise ValueError(f"Error in line {line_number}: Improper line formatting")
     except FileNotFoundError:
         # Handle file not found error
         print(f"Error: File not found - {file_path}")
+        raise FileNotFoundError(f"Error: File not found - {file_path}")
     except Exception as e:
         # Handle other unexpected errors
         print(f"An unexpected error occurred: {e}")
+        raise FileNotFoundError(f"Error: File not found - {file_path}")
 
     return members_list
 

@@ -69,10 +69,18 @@ def main():
         # Add the console handler to the logger
         logging.getLogger().addHandler(console_handler)
 
-        # Get list of members
-        org_members = get_organization_members(members_file_path)    
+        # Get list of members 
+
+        # Step 1: Get list of members 
+        logging.info(f'*************** Step 1: Get list of members ***************')
+        org_members = get_organization_members(members_file_path)
+        # had_error, error_message, org_members = get_organization_members(members_file_path)
+        # if had_error:
+        #     print(f"{error_message}")
+        #     sys.exit(1)
         
-        # Get list of projects
+        # Step 2: Get list of projects
+        logging.info(f'*************** Step 2: Get list of projects ***************')
         projects = get_project_list(project_list_file_path)
 
 
@@ -147,7 +155,10 @@ def main():
             except GithubException as e:
                 logging.error(f"GitHub error: {str(e)}")
             except Exception as e:
-                logging.error(f"An unexpected error occurred: {str(e)}")
+                logging.error(f"An unexpected error occurred: {str(e)}")   
+    except ValueError as e:
+        logging.error("Error In parsing project-list file:", {str(e)})
+        sys.exit(1)
     except Exception as e:
         logging.error(f"An unexpected error occurred in the main function: {str(e)}")
         sys.exit(1)

@@ -74,16 +74,13 @@ def main():
         # Step 1: Get list of members 
         logging.info(f'*************** Step 1: Get list of members ***************')
         org_members = get_organization_members(members_file_path)
-        # had_error, error_message, org_members = get_organization_members(members_file_path)
-        # if had_error:
-        #     print(f"{error_message}")
-        #     sys.exit(1)
         
         # Step 2: Get list of projects
         logging.info(f'*************** Step 2: Get list of projects ***************')
         projects = get_project_list(project_list_file_path)
 
-
+        # Step 3: Loop through project list
+        logging.info(f'*************** Step 3: Loop through project list ***************')
         for project in projects:
 
             try:
@@ -115,7 +112,8 @@ def main():
                 # symphony-cloud/user-experience/guis/g2smart-angular
                 # symphony-cloud/infrastructure/core/infra-manager.git"
 
-                logging.info(f'Get all open Merge requests of repo: {repo_name}')
+                # Step 4: Get all open Merge requests
+                logging.info(f'*************** Step 4: Get all open Merge requests ***************')
                 had_error, error_message, merge_requests = get_merge_requests_for_private_project(gitlab_url, gitlab_token, gitlab_repo_path)
 
                 if had_error :
@@ -123,8 +121,9 @@ def main():
                 elif merge_requests == []:
                     logging.info("===> No open merge requests were found in this GitLab repository.")
                 else:
-                    logging.info("===> Merge Requests: ")
-                    
+                    # Step 5: Loop through merge request list
+                    logging.info(f'*************** Step 5: Loop through merge request list ***************') 
+                    logging.info("===> Merge Requests: ")                
                     for merge_request_obj in merge_requests:
                         logging.info(f"******************************* Merge Request ID: {merge_request_obj['id']} *****************************************")
                         logging.info(f"URL: {merge_request_obj['url']}")
@@ -142,6 +141,8 @@ def main():
                         logging.info(f"Time Spent: {merge_request_obj['total_time_spent']}h")
                         # logging.info(f"Comments: {merge_request_obj['comments']}")
 
+                        # Step 6: Create Github pull request
+                        logging.info(f'*************** Step 6: Create Github pull request ***************') 
                         pull_request_url = create_github_pull_request(github_token, organization_name, github_repo_path, merge_request_obj, org_members)
 
                         if pull_request_url:

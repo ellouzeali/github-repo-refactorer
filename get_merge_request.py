@@ -45,8 +45,8 @@ def get_merge_requests_for_private_project(gitlab_url, gitlab_token, project_nam
             is_drafted = merge_request.work_in_progress
             source_branch = merge_request.source_branch
             target_branch = merge_request.target_branch
-            assignee = merge_request.assignee["name"] if merge_request.assignee else "None"
-            reviewers = [reviewer["name"] for reviewer in merge_request.reviewers] if merge_request.reviewers else []
+            assignee = merge_request.assignee["username"] if merge_request.assignee else "None"
+            reviewers = [reviewer["username"] for reviewer in merge_request.reviewers] if merge_request.reviewers else []
             labels = merge_request.labels if merge_request.labels else []
             milestone = merge_request.milestone["title"] if merge_request.milestone else "None"
             # TODO: Verify the existence of Time Tracking in GitLab Merge Requests

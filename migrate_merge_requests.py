@@ -73,8 +73,6 @@ def main():
 
         # Step 1: Get list of members 
         logging.info(f'*************** Step 1: Get list of members ***************')
-        # TODO test handle exception
-        members_file_path = "/test/" + members_file_path
         org_members = get_organization_members(members_file_path)
         # had_error, error_message, org_members = get_organization_members(members_file_path)
         # if had_error:

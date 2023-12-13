@@ -4,7 +4,7 @@ import time
 import gitlab
 import getpass
 import logging
-from github import Github
+from github import Github, GithubException
 from dotenv import load_dotenv
 from utils import get_project_list, extract_repository_path
 from get_merge_request import get_merge_requests_for_private_project
@@ -143,7 +143,7 @@ def main():
 
                         # Step 6: Create Github pull request
                         logging.info(f'*************** Step 6: Create Github pull request ***************') 
-                        pull_request_url = create_github_pull_request(github_token, organization_name, github_repo_path, merge_request_obj, org_members)
+                        pull_request_url = create_github_pull_request(github_token, organization_name, github_repo_path, merge_request_obj, org_members, logging)
 
                         if pull_request_url:
                             logging.info(f"===> Pull request was successfully created : {pull_request_url} \n")

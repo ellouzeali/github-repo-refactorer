@@ -1,21 +1,22 @@
 import os
 import getpass
-from github import Github
+import logging
+from github import Github, GithubException
 from dotenv import load_dotenv
 
 
-def create_github_pull_request(github_token, organization_name, repo_name, merge_request_obj, org_members):
+def create_github_pull_request(github_token, organization_name, repo_name, merge_request_obj, org_members, logger):
 
     # Create instance of Github auth
     g = Github(github_token)
 
     try:
-        print("Connection to github repo")
+        logger.info("Connection to github repo")
 
         # Get Github repo
         repo = g.get_repo(repo_name)
         
-        print("Creating pull request")
+        logger.info("Creating pull request")
 
         # Create pull request
         pull_request = repo.create_pull(
@@ -27,30 +28,32 @@ def create_github_pull_request(github_token, organization_name, repo_name, merge
             # draft=merge_request_obj["is_drafted"]
         )
 
+        logger.info("Checking assignee")
         assignee = merge_request_obj["assignee"]
         if assignee and assignee != "None":
 
-            print(f"Assignee: {assignee}")
+            logger.info(f"Assignee: {assignee}")
             username = get_username_by_full_name(org_members, assignee)
-            print(f"Username: {username}")
+            logger.info(f"Username: {username}")
 
             if is_collaborator(repo, username):
                 pull_request.add_to_assignees(username)
             else:
-                print(f"Skipping assignee {assignee} as he is not a collaborator")
+                logger.warning(f"Skipping assignee {assignee} as he is not a collaborator")
 
+        logger.info("Checking reviewers")
         reviewers = merge_request_obj["reviewers"]
         if reviewers and reviewers != []:
             for reviewer in reviewers:
 
-                print(f"Reviewer: {reviewer}")
+                logger.info(f"Reviewer: {reviewer}")
                 username = get_username_by_full_name(org_members, reviewer)
-                print(f"Username: {username}")                
+                logger.info(f"Username: {username}")                
 
                 if is_collaborator(repo, username):
                     pull_request.create_review_request([username])
                 else:
-                    print(f"Skipping reviewer {reviewer} as he is not a collaborator")
+                    logger.warning(f"Skipping reviewer {reviewer} as he is not a collaborator")
 
         labels = merge_request_obj["labels"]
         if labels and labels != []:
@@ -64,6 +67,8 @@ def create_github_pull_request(github_token, organization_name, repo_name, merge
         # TODO verify existence
         # pull_request.set_time_tracking(time_estimate, time_spent)
 
+            
+        logger.info("Adding pull request comments")
         comments = merge_request_obj["comments"]
         if comments and comments != "None":
             for comment in comments:
@@ -77,8 +82,10 @@ def create_github_pull_request(github_token, organization_name, repo_name, merge
         # Return pull request URL
         return pull_request.html_url
 
+    except GithubException as e:
+        logger.error(f"GitHub error: {str(e)}")
     except Exception as e:
-        print(f"An error occurred: {str(e)}")
+        logger.error(f"An error occurred: {str(e)}")
         return None
 
 
@@ -173,6 +180,24 @@ def main():
     repo_name = "ae-organization/charger"
     organization_name = "ae-organization"
     members_file_path = 'members-list.txt'
+    log_file_path = "my_pr_log_file.log"
+
+    
+
+    # Configure logging
+    logging.basicConfig(filename=log_file_path, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s\n')
+
+    # Create a console handler and set the level to INFO
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+
+
+    # Create a formatter and attach it to the console handler
+    console_formatter = logging.Formatter('%(levelname)s - %(message)s')
+    console_handler.setFormatter(console_formatter)
+
+    # Add the console handler to the logger
+    logging.getLogger().addHandler(console_handler)
 
 
     org_members = get_organization_members(members_file_path)
@@ -219,7 +244,7 @@ def main():
         "comments": mr_comments
     }   
 
-    pull_request_url = create_github_pull_request(github_token, organization_name, repo_name, merge_request_obj, org_members)
+    pull_request_url = create_github_pull_request(github_token, organization_name, repo_name, merge_request_obj, org_members, logging)
 
     if pull_request_url:
         print(f"Pull request was successfully created : {pull_request_url}")

@@ -114,30 +114,30 @@ def main():
             else:
                 logging.info(f'SCM connections were successfully updated in the pom files')
 
+            # # TODO uncomment azure_devops update step
+            # # Step 2: Change repository URL inside the CI/CD project
+            # logging.info(f'*************** Step 2: Change repository URL inside the CI/CD project***************')
+            # print('*************** Step 2: Change repository URL inside the CI/CD project***************')
 
-            # Step 2: Change repository URL inside the CI/CD project
-            logging.info(f'*************** Step 2: Change repository URL inside the CI/CD project***************')
-            print('*************** Step 2: Change repository URL inside the CI/CD project***************')
+            # # Remove the ".git" from the Url
+            # old_repo_url = old_gitlab_repo_url.replace('.git', '')
+            # new_repo_url = github_repo_url.replace('.git', '')
+            # logging.info(f'Old Gitlab Repo URL: {old_repo_url}')
+            # logging.info(f'New Github Repo URL: {new_repo_url}')
 
-            # Remove the ".git" from the Url
-            old_repo_url = old_gitlab_repo_url.replace('.git', '')
-            new_repo_url = github_repo_url.replace('.git', '')
-            logging.info(f'Old Gitlab Repo URL: {old_repo_url}')
-            logging.info(f'New Github Repo URL: {new_repo_url}')
+            # had_error, error_message, changed_services = update_azure_devops_services (github_devops_repo_url, github_token, github_devops_repo_branch_name, github_devops_repo_file_path, old_repo_url, new_repo_url)
+            # if had_error:
+            #     logging.error(error_message)
+            #     had_az_issue = True
+            # else:
+            #     logging.info(f'Repository URL was successfully updated in the CI/CD config File')
+            #     logging.info(f'AZ Devops services updated are: {changed_services}')       
 
-            had_error, error_message, changed_services = update_azure_devops_services (github_devops_repo_url, github_token, github_devops_repo_branch_name, github_devops_repo_file_path, old_repo_url, new_repo_url)
-            if had_error:
-                logging.error(error_message)
-                had_az_issue = True
-            else:
-                logging.info(f'Repository URL was successfully updated in the CI/CD config File')
-                logging.info(f'AZ Devops services updated are: {changed_services}')       
-
-            if changed_services:
-                with open(az_services_file_path, "a") as file:
-                    # Save updated services of infra-as-code project
-                    file.write('\n'.join(changed_services))                   
-                    file.write('\n')
+            # if changed_services:
+            #     with open(az_services_file_path, "a") as file:
+            #         # Save updated services of infra-as-code project
+            #         file.write('\n'.join(changed_services))                   
+            #         file.write('\n')
 
 
             if had_scm_issue:

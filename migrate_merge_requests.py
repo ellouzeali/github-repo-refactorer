@@ -73,6 +73,8 @@ def main():
 
         # Step 1: Get list of members 
         logging.info(f'*************** Step 1: Get list of members ***************')
+        # TODO test handle exception
+        members_file_path = "/test/" + members_file_path
         org_members = get_organization_members(members_file_path)
         # had_error, error_message, org_members = get_organization_members(members_file_path)
         # if had_error:
@@ -158,6 +160,9 @@ def main():
                 logging.error(f"An unexpected error occurred: {str(e)}")   
     except ValueError as e:
         logging.error("Error In parsing project-list file:", {str(e)})
+        sys.exit(1)
+    except FileNotFoundError as e:
+        logging.error(f"{str(e)}")
         sys.exit(1)
     except Exception as e:
         logging.error(f"An unexpected error occurred in the main function: {str(e)}")

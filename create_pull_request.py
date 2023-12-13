@@ -156,7 +156,7 @@ def get_organization_members(file_path):
     except Exception as e:
         # Handle other unexpected errors
         print(f"An unexpected error occurred: {e}")
-        raise FileNotFoundError(f"Error: File not found - {file_path}")
+        raise Exception(f"An unexpected error occurred: {e}")
 
     return members_list
 

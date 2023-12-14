@@ -1,53 +1,50 @@
-Full_name	Username
-Ali Ellouze	AL1110669_totalen
-Julien Revol	AJ1087334_totalen
-Laurent Gutierrez	AJ0221917_totalen
-Mehdi Aichouch	AL1107378_totalen
-Nassim Kebbani	AL0477601_totalen
-Olivier Lemaire	AJ1020355_totalen
-Stephane Braconne	AJ0543035_totalen
-Thibault Deregnaucourt	AL1080606_totalen
-Zakaria Tirdad	AL1106260_totalen
-Ambre Colonna	AJ1071051_totalen
-Chegou Keita	AL1082665_totalen
-Damien Deloche	AL1081142_totalen
-Laurine Lenet	AL1083360_totalen
-Latyr Diouf	AJ1035235_totalen
-Norhane El Gharbi	AL1089479_totalen
-Romain Galmes	AL1095583_totalen
-Sharif Abdoul	AL1081144_totalen
-Skander Jlaiël 	AL1081647_totalen
-Abdelmajid Hamdane	AJ1071033_totalen
-Sylvain Desprez	AL1081933_totalen
-Wassim Haggouch	AJ1032569_totalen
-Yassine Ben Jemia	AL1071034_totalen
-Clément Duvivier	AL1082343_totalen
-Ivan LOZANO	AL1114443_totalen
-Jean-Pacôme Delmas	AL1082341_totalen
-Loïs Tonnet	AL1103907_totalen
-Raphaël Zegrar	AL1082339_totalen
-Samy REZZOUQI	AL1114442_totalen
-Tomy Bezenger	AL1082345_totalen
-Valentin Dumas	AL1082350_totalen
-Wahid Haudegond	AL1082340_totalen
-Mohammed Ziati	AL1086912_totalen
-Zina Boukercha	AL1082342_totalen
-Stéphane dionisio	AL1112606_totalen
-Darine Nganga	AL1081420_totalen
-Jérôme Guenver	AL1112604_totalen
-Amina MIMOUNI	AJ1028382_totalen
-Cyril JAEGER	AJ1022260_totalen
-Eric TRUONG	AL1071068_totalen
-François MARLIAC	AL1071017_totalen
-Sarah LLIDO	AL1080731_totalen
-Salim KHENGUI	AL1087691_totalen
-Lucas Trévalinet	AL1033009_totalen
-Antoine MILCENT	AL1071018_totalen
-Vinciane BRONNER	AL1075030_totalen
-Younes Kesraoui	AL1083810_totalen
-Jon PETRISSANS	AL1084795_totalen
-Fawzi KHABER	AL1099402_totalen
-Benjamin GERARD	AL1112602_totalen
-Jean-Baptiste Deydier	AJ1082538_totalen
-Julie Franel	AL1080883_totalen
-Mohamed ABDENNEBI	AL1055188_totalen
+Gitlab_Username	Github_Username
+aliellouze	AL1110669_totalen
+jrevol	AJ1087334_totalen
+laurent.gutierrez	AJ0221917_totalen
+mehdiac	AL1107378_totalen
+OlivierLemaire	AJ1020355_totalen
+sbraconne	AJ0543035_totalen
+ttdt	AL1080606_totalen
+AmbreColonna	AJ1071051_totalen
+chegou.keita	AL1082665_totalen
+damien_tecs	AL1081142_totalen
+laurinelenet	AL1083360_totalen
+ldiouf	AJ1035235_totalen
+NorhaneTotal	AL1089479_totalen
+oscarmallet	AL1113825_totalen
+romain_galmes_tecs	AL1095583_totalen
+sharif_tevc	AL1081144_totalen
+skanderJlaiel	AL1081647_totalen
+abdel_majid	AJ1071033_totalen
+sylvain-desprez	AL1081933_totalen
+wassim.haggouch	AJ1032569_totalen
+YassineBJ	AL1071034_totalen
+c.duvivier	AL1082343_totalen
+i-lozano	AL1114443_totalen
+jeanpacome	AL1082341_totalen
+ltonnet2	AL1103907_totalen
+rzegrar	AL1082339_totalen
+srezzouqi	AL1114442_totalen
+tombezen	AL1082345_totalen
+valentin-dumas	AL1082350_totalen
+Wahid_Haudegond	AL1082340_totalen
+Ziati	AL1086912_totalen
+zinaev	AL1082342_totalen
+sdionisio	AL1112606_totalen
+BELKHODJA	AJ1028382_totalen
+cjaeger	AJ1022260_totalen
+eritru	AL1071068_totalen
+fmarliac	AL1071017_totalen
+sllido	AL1080731_totalen
+stephane.rouge	AL1115256_totalen
+lucastreva	AL1033009_totalen
+Amilcent	AL1071018_totalen
+VincianeB	AL1075030_totalen
+jonpetri	AL1084795_totalen
+fawkh	AL1099402_totalen
+benjamin.gerard1	AL1112602_totalen
+abdelkarim.benamar	AJ1071049_totalen
+jbdeydier	AJ1082538_totalen
+juliefranel	AL1080883_totalen
+MohamedAbdennebi	AL1055188_totalen

@@ -33,7 +33,7 @@ def create_github_pull_request(github_token, organization_name, repo_name, merge
         if assignee and assignee != "None":
 
             logger.info(f"Assignee: {assignee}")
-            username = get_username_by_full_name(org_members, assignee)
+            username = get_github_username_by_gitlab_username (org_members, assignee)
             logger.info(f"Username: {username}")
 
             if is_collaborator(repo, username):
@@ -47,7 +47,7 @@ def create_github_pull_request(github_token, organization_name, repo_name, merge
             for reviewer in reviewers:
 
                 logger.info(f"Reviewer: {reviewer}")
-                username = get_username_by_full_name(org_members, reviewer)
+                username = get_github_username_by_gitlab_username (org_members, reviewer)
                 logger.info(f"Username: {username}")                
 
                 if is_collaborator(repo, username):
@@ -108,24 +108,22 @@ def is_collaborator(repo, username):
 #     return None
 
 
-# def get_username_by_full_name(github, organization_name, member_full_name):
+# def get_username_by_full_name(members_list, user_full_name):
+#     try:
+#         if user_full_name:
+#             for member in members_list:
+#                 if member["full_name"].lower() == user_full_name.lower():
+#                     return member["user_name"]
+#         return None  # Return None if the member is not found
+#     except Exception as e:
+#         return None
     
-#     # Get the organization
-#     org = github.get_organization(organization_name)
-    
-#     # Get the members of the organization and filter by full name
-#     for member in org.get_members():
-#         if member.name == member_full_name:
-#             return member.login
-#     return None  # Return None if the member is not found
-
-
-def get_username_by_full_name(members_list, user_full_name):
+def get_github_username_by_gitlab_username(members_list, gitlab_username):
     try:
-        if user_full_name:
+        if gitlab_username:
             for member in members_list:
-                if member["full_name"].lower() == user_full_name.lower():
-                    return member["user_name"]
+                if member["gitlab_username"] == gitlab_username:
+                    return member["github_username"]
         return None  # Return None if the member is not found
     except Exception as e:
         return None
@@ -143,12 +141,12 @@ def get_organization_members(file_path):
             # Iterate through the remaining lines
             for line_number, line in enumerate(file, start=2):  # Start line numbering from 2 (skipping header)
                 try:
-                    # Split the line into full name and username
-                    full_name, user_name = line.strip().split('\t')
+                    # Split the line into gitlab_username and github_username
+                    gitlab_username, github_username = line.strip().split('\t')
                     # Create a dictionary for each member
                     member_details = {
-                        "full_name": full_name,
-                        "user_name": user_name
+                        "gitlab_username": gitlab_username,
+                        "github_username": github_username
                     }
                     # Append the member details to the list
                     members_list.append(member_details)

@@ -1,2 +1,2 @@
 Old_Gitlab_URL	Github_URL
-https://gitlab.com/symphony-cloud/test-migration-evse-manager	https://github.com/TotalEnergiesCode/evc-test-migration-evse-manager
+https://gitlab.com/symphony-cloud/user-experience/guis/g2smart-angular.git	https://github.com/ae-organization/g2smart-angular.git

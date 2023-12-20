@@ -54,7 +54,9 @@ for directory in directories:
         print(f"Updating repository in {directory} from {origin_url} to {new_remote_url}")
 
         # Set the new remote URL
-        subprocess.run(["git", "remote", "set-url", "origin", new_remote_url], cwd=repo_path, stdout=subprocess.PIPE)
+        # subprocess.run(["git", "remote", "set-url", "origin", new_remote_url], cwd=repo_path, stdout=subprocess.PIPE)
+        subprocess.run(["git", "remote", "rename", "origin", "gitlab"], cwd=repo_path, stdout=subprocess.PIPE)
+        subprocess.run(["git", "remote", "add", "origin", new_remote_url], cwd=repo_path, stdout=subprocess.PIPE)
         print(f"Repository in {directory} updated successfully.")
     else:
         print(f"Repository in {directory} has no matching remote in the mapping.")
